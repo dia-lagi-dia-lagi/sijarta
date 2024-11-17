@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="bg-[#e0fbfc] min-h-screen flex justify-center items-center">
+    <div class="bg-white w-3/4 p-8 rounded-lg shadow-lg">
+        <h1 class="text-center text-2xl font-bold mb-8 text-[#3d5a80]">DISKON</h1>
+
+        <!-- Voucher Section -->
+        <div class="mb-8">
+            <h2 class="text-lg font-semibold mb-4 text-[#98c1d9]">Voucher</h2>
+            <div class="space-y-4">
+                <!-- Voucher Item -->
+                <div class="border border-gray-300 p-4 rounded-lg flex items-center justify-between">
+                    <span>Kode</span>
+                    <span>Potongan</span>
+                    <span>Min Transaksi Pemesanan</span>
+                    <span>Jumlah Hari Berlaku</span>
+                    <span>Kuota Penggunaan</span>
+                    <span>Harga</span>
+                    <button class="bg-[#3d5a80] text-white px-4 py-2 rounded">Button Beli</button>
+                </div>
+                <!-- Repeat for other items -->
+                <div class="border border-gray-300 p-4 rounded-lg flex items-center justify-between">
+                    <span>Kode</span>
+                    <span>Potongan</span>
+                    <span>Min Transaksi Pemesanan</span>
+                    <span>Jumlah Hari Berlaku</span>
+                    <span>Kuota Penggunaan</span>
+                    <span>Harga</span>
+                    <button class="bg-[#3d5a80] text-white px-4 py-2 rounded">Button Beli</button>
+                </div>
+                <div class="border border-gray-300 p-4 rounded-lg flex items-center justify-between">
+                    <span>Kode</span>
+                    <span>Potongan</span>
+                    <span>Min Transaksi Pemesanan</span>
+                    <span>Jumlah Hari Berlaku</span>
+                    <span>Kuota Penggunaan</span>
+                    <span>Harga</span>
+                    <button class="bg-[#3d5a80] text-white px-4 py-2 rounded">Button Beli</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Promo Section -->
+        <div>
+            <h2 class="text-lg font-semibold mb-4 text-[#98c1d9]">Promo</h2>
+            <div class="space-y-4">
+                <!-- Promo Item -->
+                <div class="border border-gray-300 p-4 rounded-lg flex items-center justify-between">
+                    <span>Kode</span>
+                    <span>Tanggal Akhir Berlaku</span>
+                </div>
+                <!-- Repeat for other items -->
+                <div class="border border-gray-300 p-4 rounded-lg flex items-center justify-between">
+                    <span>Kode</span>
+                    <span>Tanggal Akhir Berlaku</span>
+                </div>
+                <div class="border border-gray-300 p-4 rounded-lg flex items-center justify-between">
+                    <span>Kode</span>
+                    <span>Tanggal Akhir Berlaku</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+

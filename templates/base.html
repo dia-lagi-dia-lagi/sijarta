@@ -1,0 +1,24 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    {% block meta %} {% endblock meta %}
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body>
+    {% block header %}
+    {% include 'header.html' %}
+    {% endblock header %}
+    
+    <div class="content">
+        {% block content %}
+        {% endblock content %}
+    </div>
+    {% block footer %}
+    {% include 'footer.html' %}
+    {% endblock footer %}
+    
+  </body>
+</html>
