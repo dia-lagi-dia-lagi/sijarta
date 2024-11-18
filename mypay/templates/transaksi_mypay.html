@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% block content %}
+<div style="border: 1px solid #000; padding: 20px; max-width: 600px; margin: auto;">
+    <h2 style="text-align: center;">Transaksi MyPay</h2>
+    <div style="margin-bottom: 20px;">
+        <strong>Tanggal Transaksi:</strong> 18 Nov 2024
+    </div>
+    <div style="margin-bottom: 20px;">
+        <strong>Nama User:</strong> John Doe<br>
+        <strong>Saldo User:</strong> Rp 500,000
+    </div>
+    <div style="margin-bottom: 20px;">
+        <label for="kategori_transaksi"><strong>Kategori Transaksi:</strong></label>
+        <select id="kategori_transaksi" onchange="updateForm()" style="width: 100%; padding: 5px;">
+            <option value="topup">Top-Up</option>
+            <option value="payment">Pembayaran Jasa</option>
+            <option value="transfer">Transfer</option>
+            <option value="withdrawal">Withdrawal</option>
+        </select>
+    </div>
+    <div id="form_container" style="border: 1px solid #000; padding: 20px;">
+        <!-- Forms will dynamically appear here -->
+    </div>
+</div>
+
+<script>
+function updateForm() {
+    const category = document.getElementById("kategori_transaksi").value;
+    const formContainer = document.getElementById("form_container");
+    let formContent = "";
+
+    switch (category) {
+        case "topup":
+            formContent = `
+                <div>
+                    <label for="nominal"><strong>Nominal:</strong></label>
+                    <input type="number" id="nominal" placeholder="Enter amount" style="width: 100%; padding: 5px;">
+                    <button style="margin-top: 10px; padding: 5px 10px; background-color: #007bff; color: #fff; border: none; cursor: pointer;">Top Up</button>
+                </div>
+            `;
+            break;
+        case "payment":
+            formContent = `
+                <div>
+                    <label for="pesanan_jasa"><strong>Pesanan Jasa:</strong></label>
+                    <select id="pesanan_jasa" style="width: 100%; padding: 5px;">
+                        <option value="jasa1">Jasa 1</option>
+                        <option value="jasa2">Jasa 2</option>
+                    </select>
+                    <div style="margin-top: 10px;">
+                        <strong>Harga Jasa:</strong> Rp 100,000
+                    </div>
+                    <button style="margin-top: 10px; padding: 5px 10px; background-color: #007bff; color: #fff; border: none; cursor: pointer;">Bayar</button>
+                </div>
+            `;
+            break;
+        case "transfer":
+            formContent = `
+                <div>
+                    <label for="nohp_tujuan"><strong>No HP Tujuan:</strong></label>
+                    <input type="text" id="nohp_tujuan" placeholder="Enter phone number" style="width: 100%; padding: 5px;">
+                    <label for="nominal_transfer" style="margin-top: 10px;"><strong>Nominal:</strong></label>
+                    <input type="number" id="nominal_transfer" placeholder="Enter amount" style="width: 100%; padding: 5px;">
+                    <button style="margin-top: 10px; padding: 5px 10px; background-color: #007bff; color: #fff; border: none; cursor: pointer;">Bayar</button>
+                </div>
+            `;
+            break;
+        case "withdrawal":
+            formContent = `
+                <div>
+                    <label for="nama_bank"><strong>Nama Bank:</strong></label>
+                    <select id="nama_bank" style="width: 100%; padding: 5px;">
+                        <option value="bca">BCA</option>
+                        <option value="bni">BNI</option>
+                        <option value="mandiri">Mandiri</option>
+                    </select>
+                    <label for="no_rekening" style="margin-top: 10px;"><strong>No Rekening:</strong></label>
+                    <input type="text" id="no_rekening" placeholder="Enter account number" style="width: 100%; padding: 5px;">
+                    <label for="nominal_withdraw" style="margin-top: 10px;"><strong>Nominal:</strong></label>
+                    <input type="number" id="nominal_withdraw" placeholder="Enter amount" style="width: 100%; padding: 5px;">
+                    <button style="margin-top: 10px; padding: 5px 10px; background-color: #007bff; color: #fff; border: none; cursor: pointer;">Bayar</button>
+                </div>
+            `;
+            break;
+    }
+
+    formContainer.innerHTML = formContent;
+}
+
+// Initialize with the first form
+updateForm();
+</script>
+{% endblock %}
