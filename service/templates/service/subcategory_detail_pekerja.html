@@ -1,0 +1,104 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ subcategory.name }} - Sijarta (Pekerja)</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.19/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-base-300">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header Information -->
+        <div class="card bg-base-200 shadow-xl mb-8">
+            <div class="card-body">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h2 class="card-title text-2xl">{{ subcategory.name }}</h2>
+                        <p class="text-sm text-base-content/70">{{ subcategory.category }}</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-sm text-base-content/70 mb-2">Mode Pekerja</p>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <p class="text-base-content/80">{{ subcategory.description }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Service Sessions -->
+        <div class="card bg-base-200 shadow-xl mb-8">
+            <div class="card-body">
+                <h3 class="text-xl font-semibold mb-4">Pilihan Sesi Layanan</h3>
+                <div class="space-y-4">
+                    {% for session in subcategory.service_sessions %}
+                    <div class="p-4 bg-base-300 rounded-lg flex justify-between items-center">
+                        <div>
+                            <h4 class="font-medium">{{ session.name }}</h4>
+                            <p class="text-primary">{{ session.price }}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Workers -->
+        <div class="card bg-base-200 shadow-xl mb-8">
+            <div class="card-body">
+                <h3 class="text-xl font-semibold mb-4">Pekerja</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                    {% for worker in subcategory.workers %}
+                    <a href="{% url 'service:worker_profile' worker.id %}" 
+                       class="card bg-base-300 hover:bg-base-100 transition-colors cursor-pointer">
+                        <div class="card-body p-4 text-center">
+                            <h4 class="font-medium">{{ worker.name }}</h4>
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Join Button -->
+        {% if not subcategory.is_joined %}
+            <div class="card-body items-center">
+                <button class="btn btn-primary btn-lg w-full max-w-md">Bergabung sekarang!</button>
+            </div>
+        {% endif %}
+
+        <!-- Testimonials -->
+        <div class="card bg-base-200 shadow-xl">
+            <div class="card-body">
+                <h3 class="text-xl font-semibold mb-4">Testimoni</h3>
+                <div class="space-y-4">
+                    {% for testimonial in subcategory.testimonials %}
+                    <div class="bg-base-300 rounded-lg p-4">
+                        <div class="flex justify-between items-start mb-2">
+                            <div>
+                                <h4 class="font-medium">{{ testimonial.user_name }}</h4>
+                                <p class="text-sm text-base-content/70">{{ testimonial.date }}</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-medium">{{ testimonial.worker_name }}</p>
+                                <div class="rating">
+                                    {% for i in '12345'|make_list %}
+                                    <input type="radio" name="rating-{{ forloop.parentloop.counter }}" 
+                                           class="mask mask-star-2 bg-warning" 
+                                           {% if forloop.counter <= testimonial.rating %}checked{% endif %} 
+                                           disabled />
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-base-content/80">{{ testimonial.text }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,147 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pesanan Jasa - Sijarta</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.19/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-base-300">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-2xl font-bold mb-8">Pesanan Jasa</h1>
+
+        <!-- Filters -->
+        <div class="flex flex-col sm:flex-row gap-4 mb-8">
+            <select class="select select-bordered w-full sm:w-64">
+                <option disabled selected>Subkategori</option>
+                {% for subcat in data.subcategories %}
+                <option value="{{ subcat.id }}">{{ subcat.name }}</option>
+                {% endfor %}
+            </select>
+
+            <select class="select select-bordered w-full sm:w-64">
+                <option disabled selected>Status Pesanan</option>
+                {% for status in data.status_options %}
+                <option value="{{ status }}">{{ status }}</option>
+                {% endfor %}
+            </select>
+
+            <div class="form-control w-full sm:w-64">
+                <input type="text" placeholder="Search" class="input input-bordered" />
+            </div>
+
+            <button class="btn btn-primary w-full sm:w-auto">Search</button>
+        </div>
+
+        <!-- Orders List -->
+        <div class="space-y-4">
+            {% for order in data.orders %}
+            <div class="card bg-base-200 shadow-xl">
+                <div class="card-body">
+                    <div class="flex flex-col lg:flex-row justify-between gap-4">
+                        <!-- Order Details -->
+                        <div class="grid grid-cols-2 md:grid-cols-5 gap-4 flex-grow">
+                            <div>
+                                <h3 class="font-semibold">Subkategori Jasa</h3>
+                                <p>{{ order.subcategory }}</p>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold">Sesi Layanan</h3>
+                                <p>{{ order.service_session }}</p>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold">Harga</h3>
+                                <p>{{ order.price }}</p>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold">Nama Pekerja</h3>
+                                <p>{{ order.worker_name }}</p>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold">Status</h3>
+                                <p>{{ order.status }}</p>
+                            </div>
+                        </div>
+
+                        <!-- Action Button -->
+                        <div class="flex items-center justify-end">
+                            {% if order.status == 'Menunggu Pembayaran' or order.status == 'Mencari Pekerja Terdekat' %}
+                                <button class="btn btn-error">Batalkan</button>
+                            {% elif order.status == 'Pesanan Selesai' and not order.has_testimonial %}
+                                <button class="btn btn-primary" onclick="openTestimonialModal('{{ order.id }}')">
+                                    Buat Testimoni
+                                </button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Testimonial Modal -->
+    <dialog id="testimonial_modal" class="modal">
+        <div class="modal-box">
+            <h3 class="font-bold text-lg mb-4">Buat Testimoni</h3>
+            <form method="dialog" class="space-y-4">
+                <!-- Rating -->
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">Rating</span>
+                    </label>
+                    <div class="rating gap-1">
+                        <input type="radio" name="rating" value="1" class="mask mask-star-2 bg-warning"/>
+                        <input type="radio" name="rating" value="2" class="mask mask-star-2 bg-warning"/>
+                        <input type="radio" name="rating" value="3" class="mask mask-star-2 bg-warning"/>
+                        <input type="radio" name="rating" value="4" class="mask mask-star-2 bg-warning"/>
+                        <input type="radio" name="rating" value="5" class="mask mask-star-2 bg-warning"/>
+                    </div>
+                </div>
+
+                <!-- Testimonial Text -->
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">Teks Testimoni</span>
+                    </label>
+                    <textarea class="textarea textarea-bordered h-24" placeholder="Tulis testimoni Anda"></textarea>
+                </div>
+
+                <!-- Buttons -->
+                <div class="modal-action">
+                    <button class="btn" onclick="closeTestimonialModal()">Batal</button>
+                    <button class="btn btn-primary" onclick="submitTestimonial(event)">Kirim Testimoni</button>
+                </div>
+            </form>
+        </div>
+    </dialog>
+
+    <script>
+        function openTestimonialModal(orderId) {
+            const modal = document.getElementById('testimonial_modal');
+            modal.setAttribute('data-order-id', orderId);
+            modal.showModal();
+        }
+
+        function closeTestimonialModal() {
+            const modal = document.getElementById('testimonial_modal');
+            modal.close();
+        }
+
+        function submitTestimonial(event) {
+            event.preventDefault();
+            // In a real implementation, this would submit the testimonial
+            // For now, just close the modal
+            closeTestimonialModal();
+        }
+
+        // Filter functionality
+        document.querySelector('.btn-primary').addEventListener('click', function() {
+            // In a real implementation, this would filter the orders
+            console.log('Filtering orders...');
+        });
+    </script>
+</body>
+</html>
