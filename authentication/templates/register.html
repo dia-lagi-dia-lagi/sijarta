@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="w-full max-w-lg p-8 space-y-6 bg-gray-800 rounded-lg shadow-lg">
+  <h1 class="text-3xl font-bold text-center text-white">Register</h1>
+  
+  <!-- Role Selection -->
+  <div class="space-y-4">
+      <p class="text-lg text-gray-300">Please select your role:</p>
+      <div class="flex space-x-4 justify-center">
+          <button id="role-pengguna" class="btn-role bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 w-1/3">Pengguna</button>
+          <button id="role-pekerja" class="btn-role bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 w-1/3">Pekerja</button>
+      </div>
+  </div>
+
+  <!-- Dynamic Form Fields (Initially Hidden) -->
+  <div id="form-pengguna" class="hidden space-y-4">
+      <p class="text-lg text-gray-300">Register as Pengguna:</p>
+      <form class="space-y-4">
+          <!-- Nama -->
+          <div>
+              <label for="nama" class="block text-sm font-medium text-gray-300">Nama</label>
+              <input id="nama" type="text" placeholder="Enter your name" class="w-full px-4 py-2 mt-1 bg-gray-700 text-gray-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" required />
+          </div>
+
+          <!-- Password -->
+          <div>
+              <label for="password" class="block text-sm font-medium text-gray-300">Password</label>
+              <input id="password" type="password" placeholder="Enter your password" class="w-full px-4 py-2 mt-1 bg-gray-700 text-gray-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" required />
+          </div>
+
+          <!-- Gender (Radio) -->
+          <div>
+              <label class="block text-sm font-medium text-gray-300">Jenis Kelamin</label>
+              <div class="flex space-x-4">
+                  <label class="inline-flex items-center text-gray-300">
+                      <input type="radio" name="gender" value="Laki-Laki" class="form-radio text-blue-500" required />
+                      <span class="ml-2">Laki-Laki</span>
+                  </label>
+                  <label class="inline-flex items-center text-gray-300">
+                      <input type="radio" name="gender" value="Perempuan" class="form-radio text-blue-500" required />
+                      <span class="ml-2">Perempuan</span>
+                  </label>
+              </div>
+          </div>
+
+          <!-- NoHP -->
+          <div>
+              <label for="nohp" class="block text-sm font-medium text-gray-300">No HP</label>
+              <input id="nohp" type="tel" placeholder="Enter your phone number" class="w-full px-4 py-2 mt-1 bg-gray-700 text-gray-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" required />
+          </div>
+
+          <!-- Tanggal Lahir -->
+          <div>
+              <label for="tanggal-lahir" class="block text-sm font-medium text-gray-300">Tanggal Lahir</label>
+              <input id="tanggal-lahir" type="date" class="w-full px-4 py-2 mt-1 bg-gray-700 text-gray-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" required />
+          </div>
+
+          <!-- Alamat -->
+          <div>
+              <label for="alamat" class="block text-sm font-medium text-gray-300">Alamat</label>
+              <textarea id="alamat" rows="3" placeholder="Enter your address" class="w-full px-4 py-2 mt-1 bg-gray-700 text-gray-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" required></textarea>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" class="w-full px-4 py-2 text-center text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:outline-none">Register</button>
+      </form>
+  </div>
+
+  <div id="form-pekerja" class="hidden space-y-4">
+      <p class="text-lg text-gray-300">Register as Pekerja:</p>
+      <form class="space-y-4">
+          <!-- Nama -->
+          <div>
+              <label for="nama-pekerja" class="block text-sm font-medium text-gray-300">Nama</label>
+              <input id="nama-pekerja" type="text" placeholder="Enter your name" class="w-full px-4 py-2 mt-1 bg-gray-700 text-gray-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" required />
+          </div>
+
+          <!-- Password -->
+          <div>
+              <label for="password-pekerja" class="block text-sm font-medium text-gray-300">Password</label>
+              <input id="password-pekerja" type="password" placeholder="Enter your password" class="w-full px-4 py-2 mt-1 bg-gray-700 text-gray-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" required />
+          </div>
+
+          <!-- Gender (Radio) -->
+          <div>
+              <label class="block text-sm font-medium text-gray-300">Jenis Kelamin</label>
+              <div class="flex space-x-4">
+                  <label class="inline-flex items-center text-gray-300">
+                      <input type="radio" name="gender-pekerja" value="Laki-Laki" class="form-radio text-blue-500" required />
+                      <span class="ml-2">Laki-Laki</span>
+                  </label>
+                  <label class="inline-flex items-center text-gray-300">
+                      <input type="radio" name="gender-pekerja" value="Perempuan" class="form-radio text-blue-500" required />
+                      <span class="ml-2">Perempuan</span>
+                  </label>
+              </div>
+          </div>
+
+          <!-- NoHP -->
+          <div>
+              <label for="nohp-pekerja" class="block text-sm font-medium text-gray-300">No HP</label>
+              <input id="nohp-pekerja" type="tel" placeholder="Enter your phone number" class="w-full px-4 py-2 mt-1 bg-gray-700 text-gray-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" required />
+          </div>
+
+          <!-- Tanggal Lahir -->
+          <div>
+              <label for="tanggal-lahir-pekerja" class="block text-sm font-medium text-gray-300">Tanggal Lahir</label>
+              <input id="tanggal-lahir-pekerja" type="date" class="w-full px-4 py-2 mt-1 bg-gray-700 text-gray-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" required />
+          </div>
+
+          <!-- Alamat -->
+          <div>
+              <label for="alamat-pekerja" class="block text-sm font-medium text-gray-300">Alamat</label>
+              <textarea id="alamat-pekerja" rows="3" placeholder="Enter your address" class="w-full px-4 py-2 mt-1 bg-gray-700 text-gray-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" required></textarea>
+          </div>
+
+          <!-- Nama Bank (Dropdown) -->
+          <div>
+              <label for="bank" class="block text-sm font-medium text-gray-300">Nama Bank</label>
+              <select id="bank" class="w-full px-4 py-2 mt-1 bg-gray-700 text-gray-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" required>
+                  <option value="">Select Bank</option>
+                  <option value="gopay">GoPay</option>
+                  <option value="ovo">OVO</option>
+                  <option value="bca">Virtual Account BCA</option>
+                  <option value="bni">Virtual Account BNI</option>
+                  <option value="mandiri">Virtual Account Mandiri</option>
+              </select>
+          </div>
+
+          <!-- No Rekening -->
+          <div>
+              <label for="no-rekening" class="block text-sm font-medium text-gray-300">No Rekening</label>
+              <input id="no-rekening" type="text" placeholder="Enter your account number" class="w-full px-4 py-2 mt-1 bg-gray-700 text-gray-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" required />
+          </div>
+
+          <!-- NPWP -->
+          <div>
+              <label for="npwp" class="block text-sm font-medium text-gray-300">NPWP</label>
+              <input id="npwp" type="text" placeholder="Enter your NPWP" class="w-full px-4 py-2 mt-1 bg-gray-700 text-gray-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" required />
+          </div>
+
+          <!-- URL Foto -->
+          <div>
+              <label for="foto" class="block text-sm font-medium text-gray-300">URL Foto</label>
+              <input id="foto" type="url" placeholder="Enter your photo URL" class="w-full px-4 py-2 mt-1 bg-gray-700 text-gray-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" required />
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" class="w-full px-4 py-2 text-center text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:outline-none">Register</button>
+      </form>
+  </div>
+
+</div>
+
+<script>
+  document.getElementById('role-pengguna').addEventListener('click', function() {
+      document.getElementById('form-pengguna').classList.remove('hidden');
+      document.getElementById('form-pekerja').classList.add('hidden');
+  });
+  
+  document.getElementById('role-pekerja').addEventListener('click', function() {
+      document.getElementById('form-pengguna').classList.add('hidden');
+      document.getElementById('form-pekerja').classList.remove('hidden');
+  });
+</script>
+{% endblock content %}
