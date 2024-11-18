@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card-body bg-neutral-content" style="display:flex; justify-content: center; align-items: center;">
+    <h2 class="card-title text-black" style="padding-bottom:20px;">Form Testimoni</h2>
+
+    <div class="join">
+    <span class="label-text text-black join-item" style="padding-right: 13px;">Rating:</span>
+    <div class="rating join-item">
+        <input type="radio" name="rating-2" class="mask mask-star-2 bg-orange-400" />
+        <input
+          type="radio"
+          name="rating-2"
+          class="mask mask-star-2 bg-orange-400"
+          checked="checked" />
+        <input type="radio" name="rating-2" class="mask mask-star-2 bg-orange-400" />
+        <input type="radio" name="rating-2" class="mask mask-star-2 bg-orange-400" />
+        <input type="radio" name="rating-2" class="mask mask-star-2 bg-orange-400" />
+      </div>
+    </div>
+
+    <label class="form-control">
+        <div class="label">
+          <span class="label-text text-black">Komentar:</span>
+        </div>
+        <textarea class="textarea textarea-bordered h-24" placeholder=""></textarea>
+        <div class="label">
+       
+        </div>
+      </label>
+
+      <button class="btn btn-primary-content">Submit</button>
+
+  </div>
+
+  
+{% endblock content %}

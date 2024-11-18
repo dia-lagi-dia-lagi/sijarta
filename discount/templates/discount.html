@@ -1,0 +1,267 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+  .description-container {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .description {
+   
+    text-align: left;
+  }
+
+  .data {
+    text-align: right;
+  }
+
+  .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .big-header {
+            font-size: 4em; /* Adjust as needed for a very large size */
+        }
+
+  
+</style>
+
+<div class="container">
+  <h1 class="big-header">Diskon</h1>
+</div>
+<div class="divider  text-2xl">Voucher</div>
+
+<div class="overflow-x-auto w-full">
+    <div class="flex join justify-center space-x-7">
+        <div class="card bg-base-100 w-96 shadow-xl join-item" style="border: 4px solid #505050;">
+            <figure>
+              <img
+                src="https://images.template.net/341573/Voucher-Template-edit-online.png"
+                alt="Voucher" />
+            </figure>
+            <div class="card-body">
+              <h2 class="card-title">SPESIALRUMAH2024</h2>
+              <div class="description-container">
+                <p class="description">Potongan:</p>
+                <p class="data">Rp25.000</p>
+              </div>
+              <div class="description-container">
+                <p class="description">Minimal Transaksi:</p>
+                <p class="data">Rp100.000</p>
+              </div>
+              <div class="description-container">
+                <p class="description">Jumlah Hari Berlaku:</p>
+                <p class="data">15</p>
+              </div>
+              <div class="description-container">
+                <p class="description">Kuota Penggunaan:</p>
+                <p class="data">5</p>
+              </div>
+              <div class="description-container">
+                <p class="description">Harga:</p>
+                <p class="data">Rp50.000</p>
+              </div>
+              <p></p>
+              <p></p>
+              <p></p>
+              <div class="card-actions justify-end">
+                <!-- Open the modal using ID.showModal() method -->
+                <button class="btn btn-primary" onclick="my_modal_1.showModal()">Buy Now</button>
+                <dialog id="my_modal_1" class="modal modal-bottom sm:modal-middle">
+                  <div class="modal-box">
+                    <h3 class="text-lg font-bold">SUKSES!</h3>
+                    <p class="py-4">Berhasil membeli voucher kode SPESIALRUMAH2024</p><br>
+                  
+                    <p >Berlaku hingga 28/11/2024 </p>
+                    <p >Kuota Penggunaan 5 kali</p>
+                    <div class="modal-action">
+                      <form method="dialog">
+                        <!-- if there is a button in form, it will close the modal -->
+                        <button class="btn">Close</button>
+                      </form>
+                    </div>
+                  </div>
+                </dialog>
+              </div>
+            </div>
+          </div>
+          <div class="card bg-base-100 w-96 shadow-xl join-item " style="border: 4px solid #505050;">
+            <figure>
+              <img
+                src="https://images.template.net/341573/Voucher-Template-edit-online.png"
+                alt="Voucher" />
+            </figure>
+            <div class="card-body">
+              <h2 class="card-title">BERSIHHEMAT50</h2>
+              <div class="description-container">
+                <p class="description">Potongan:</p>
+                <p class="data">Rp50.000</p>
+              </div>
+              <div class="description-container">
+                <p class="description">Minimal Transaksi:</p>
+                <p class="data">Rp200.000</p>
+              </div>
+              <div class="description-container">
+                <p class="description">Jumlah Hari Berlaku:</p>
+                <p class="data">30</p>
+              </div>
+              <div class="description-container">
+                <p class="description">Kuota Penggunaan:</p>
+                <p class="data">5</p>
+              </div>
+              <div class="description-container">
+                <p class="description">Harga:</p>
+                <p class="data">Rp100.000</p>
+              </div>
+              <p></p>
+              <p></p>
+              <p></p>
+              <div class="card-actions justify-end">
+                <!-- Open the modal using ID.showModal() method -->
+                <button class="btn btn-primary" onclick="my_modal_2.showModal()">Buy Now</button>
+                <dialog id="my_modal_2" class="modal modal-bottom sm:modal-middle">
+                  <div class="modal-box">
+                    <h3 class="text-lg font-bold">GAGAL!</h3>
+                    <p class="py-4">Maaf, saldo Anda tidak cukup untuk membeli voucher ini.</p>
+                    <div class="modal-action">
+                      <form method="dialog">
+                        <!-- if there is a button in form, it will close the modal -->
+                        <button class="btn">Close</button>
+                      </form>
+                    </div>
+                  </div>
+                </dialog>
+
+              </div>
+            </div>
+          </div>
+          <div class="card bg-base-100 w-96 shadow-xl join-item" style="border: 4px solid #505050;">
+            <figure>
+              <img
+                src="https://images.template.net/341573/Voucher-Template-edit-online.png"
+                alt="Voucher" />
+            </figure>
+            <div class="card-body">
+              <h2 class="card-title">JASARUMAH30</h2>
+              <div class="description-container">
+                <p class="description">Potongan:</p>
+                <p class="data">Rp30.000</p>
+              </div>
+              <div class="description-container">
+                <p class="description">Minimal Transaksi:</p>
+                <p class="data">Rp85.000</p>
+              </div>
+              <div class="description-container">
+                <p class="description">Jumlah Hari Berlaku:</p>
+                <p class="data">7</p>
+              </div>
+              <div class="description-container">
+                <p class="description">Kuota Penggunaan:</p>
+                <p class="data">2</p>
+              </div>
+              <div class="description-container">
+                <p class="description">Harga:</p>
+                <p class="data">Rp20.000</p>
+              </div>
+              <p></p>
+              <p></p>
+              <p></p>
+              <div class="card-actions justify-end">
+                <!-- Open the modal using ID.showModal() method -->
+                <button class="btn btn-primary" onclick="my_modal_3.showModal()">Buy Now</button>
+                <dialog id="my_modal_3" class="modal modal-bottom sm:modal-middle">
+                  <div class="modal-box">
+                    <h3 class="text-lg font-bold">Hello!</h3>
+                    <p class="py-4">Press ESC key or click the button below to close</p>
+                    <div class="modal-action">
+                      <form method="dialog">
+                        <!-- if there is a button in form, it will close the modal -->
+                        <button class="btn">Close</button>
+                      </form>
+                    </div>
+                  </div>
+                </dialog>
+              </div>
+            </div>
+          </div>
+    </div>
+
+</div>
+<div></div>
+<div></div>
+<div class="divider text-2xl">Promo</div>
+
+    <div class="overflow-x-auto w-full">
+    <div class="flex join justify-center space-x-7 join-item" >
+        <div class="card bg-base-100 w-96 shadow-xl" style="border: 4px solid #505050;">
+            <figure>
+              <img
+                src="https://t4.ftcdn.net/jpg/02/92/36/71/360_F_292367179_T5xBfw6nJBwJ0HE8wfwz20QuYfOrIm8b.jpg"
+                alt="Shoes" />
+            </figure>
+            <div class="card-body">
+              <h2 class="card-title">
+                CLEANHOUSE2024
+                <div class="badge badge-secondary">NEW</div>
+              </h2>
+              <div class="description-container">
+                <p class="description">Tanggal Akhir Berlaku:</p>
+                <p class="data">2024-10-18</p>
+              </div>
+             
+            </div>
+          </div>
+          <div class="card bg-base-100 w-96 shadow-xl" style="border: 4px solid #505050;">
+            <figure>
+              <img
+                src="https://t4.ftcdn.net/jpg/02/92/36/71/360_F_292367179_T5xBfw6nJBwJ0HE8wfwz20QuYfOrIm8b.jpg"
+                alt="Shoes" />
+            </figure>
+            <div class="card-body">
+              <h2 class="card-title">
+                SUPERBERSIH50
+                <div class="badge badge-secondary">NEW</div>
+              </h2>
+              <div class="description-container">
+                <p class="description">Tanggal Akhir Berlaku:</p>
+                <p class="data">2024-11-02</p>
+              </div>
+             
+            </div>
+          </div>
+          <div class="card bg-base-100 w-96 shadow-xl" style="border: 4px solid #505050;">
+            <figure>
+              <img
+                src="https://t4.ftcdn.net/jpg/02/92/36/71/360_F_292367179_T5xBfw6nJBwJ0HE8wfwz20QuYfOrIm8b.jpg"
+                alt="Shoes" />
+            </figure>
+            <div class="card-body">
+              <h2 class="card-title">
+                FLASHCLEAN30
+                <div class="badge badge-secondary">NEW</div>
+              </h2>
+              <div class="description-container">
+                <p class="description">Tanggal Akhir Berlaku:</p>
+                <p class="data">2024-11-15</p>
+              </div>
+             
+            </div>
+          </div>
+    </div>
+
+</div>
+   
+ 
+  
+    
+
+
+
+   
+  
+{% endblock content %}
+
