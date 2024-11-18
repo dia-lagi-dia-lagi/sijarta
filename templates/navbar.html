@@ -1,0 +1,64 @@
+<div class="navbar sticky top-0 bg-gray-600 text-white z-50 shadow-md">
+  <div class="ml-2">
+    <a class="btn btn-ghost normal-case text-xl">SIJARTA</a>
+  </div>
+  <div class="flex-none gap-2">
+    
+    <!-- Navbar for Guest (Login and Register) -->
+    <div id="navbar-guest" class="hidden">
+      <a class="btn btn-outline text-white border-white hover:bg-white hover:text-gray-600" href="#login">Login</a>
+      <a class="btn btn-outline text-white border-white hover:bg-white hover:text-gray-600" href="#register">Register</a>
+    </div>
+
+    <!-- Navbar for Pengguna -->
+    <div id="navbar-pengguna" class="flex items-center hidden">
+      <div>
+        <span class="font-semibold ml-2 mr-4">Pengguna</span>
+        <span>John Doe</span>
+      </div>
+      <ul class="menu menu-horizontal p-0 flex space-x-4">
+        <li><a href="#homepage">Homepage</a></li>
+        <li><a href="#mypay">MyPay</a></li>
+        <li><a href="#kelola-pesanan">Kelola Pesanan Saya</a></li>
+        <li><a href="#diskon">Diskon</a></li>
+        <li><a href="#profile">Profile</a></li>
+        <li><a href="#logout">Logout</a></li>
+      </ul>
+    </div>
+
+    <!-- Navbar for Pekerja -->
+    <div id="navbar-pekerja" class="flex items-center hidden">
+      <div>
+        <span class="font-semibold ml-2 mr-4">Pekerja</span>
+        <span>Somebody</span>
+      </div>
+      <ul class="menu menu-horizontal p-0 flex space-x-4">
+        <li><a href="#homepage">Homepage</a></li>
+        <li><a href="#kelola-pekerjaan">Kelola Pekerjaan Saya</a></li>
+        <li><a href="#status-pekerjaan">Kelola Status Pekerjaan</a></li>
+        <li><a href="#mypay">MyPay</a></li>
+        <li><a href="#profile">Profile</a></li>
+        <li><a href="#logout">Logout</a></li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<!-- Example JavaScript for Dynamic Navbar Switching -->
+<script>
+  const navbarGuest = document.getElementById('navbar-guest');
+  const navbarPengguna = document.getElementById('navbar-pengguna');
+  const navbarPekerja = document.getElementById('navbar-pekerja');
+
+  // Simulated user roles: 'guest', 'pengguna', or 'pekerja'
+  const userRole = 'pekerja'; // Change this value to test the different navbars
+
+  if (userRole === 'guest') {
+    navbarGuest.classList.remove('hidden');
+  } else if (userRole === 'pengguna') {
+    navbarPengguna.classList.remove('hidden');
+  } else if (userRole === 'pekerja') {
+    navbarPekerja.classList.remove('hidden');
+  }
+</script>
