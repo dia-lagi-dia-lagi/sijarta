@@ -27,7 +27,8 @@ urlpatterns = [
     path('', include('discount.urls', namespace="discount")),
     path('', include('service.urls')),
     path('', include('authentication.urls')),
-    path('', include('user_profile.urls'))
+    path('', include('user_profile.urls')),
+    path('mypay/', include('mypay.urls'))
 ]
 
 

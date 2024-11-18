@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% block content %}
+<div style="border: 1px solid #000; padding: 20px; max-width: 800px; margin: auto;">
+    <h2 style="text-align: center;">Status Pekerjaan Jasa</h2>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <div style="flex: 1; margin-right: 10px;">
+            <label for="nama_jasa"><strong>Nama Jasa:</strong></label>
+            <input type="text" id="nama_jasa" placeholder="Cari Nama Jasa" style="width: 100%; padding: 5px;">
+        </div>
+        <div style="flex: 1; margin-right: 10px;">
+            <label for="status_pesanan"><strong>Status Pesanan:</strong></label>
+            <select id="status_pesanan" style="width: 100%; padding: 5px;">
+                <option value="">Semua Status</option>
+                <option value="menunggu">Menunggu Pekerja Berangkat</option>
+                <option value="tiba">Pekerja Tiba Di Lokasi</option>
+                <option value="melayani">Pelayanan Jasa Sedang Dilakukan</option>
+                <option value="selesai">Pesanan Selesai</option>
+                <option value="dibatalkan">Pesanan Dibatalkan</option>
+            </select>
+        </div>
+        <div>
+            <button onclick="filterOrders()" style="padding: 5px 10px; background-color: #007bff; color: #fff; border: none; cursor: pointer;">
+                Search
+            </button>
+        </div>
+    </div>
+    <div id="order_list" style="margin-top: 20px;">
+        <!-- Example Order Listings -->
+        <div style="border: 1px solid #000; padding: 10px; margin-bottom: 10px;">
+            <div style="display: flex; justify-content: space-between;">
+                <div><strong>Nama Subkategori Pesanan:</strong> Daily Cleaning</div>
+                <div><strong>Nama Pelanggan:</strong> Jane Doe</div>
+                <div><strong>Total Biaya:</strong> Rp 150,000</div>
+                <div><strong>Status Pesanan:</strong> Menunggu Pekerja Berangkat</div>
+                <div>
+                    <button onclick="updateStatus('tiba')" style="padding: 5px 10px; background-color: #28a745; color: #fff; border: none; cursor: pointer;">
+                        Tiba Di Lokasi
+                    </button>
+                </div>
+            </div>
+            <div style="margin-top: 10px;">
+                <strong>Tanggal Pemesanan:</strong> 18 Nov 2024<br>
+                <strong>Tanggal Pekerjaan:</strong> 20 Nov 2024
+            </div>
+        </div>
+        <!-- Additional Orders Would Be Dynamically Rendered Here -->
+    </div>
+</div>
+
+<script>
+function filterOrders() {
+    // Placeholder function for filtering orders based on search criteria
+    alert("Filtering orders based on Nama Jasa and Status Pesanan!");
+}
+
+function updateStatus(nextStatus) {
+    // Placeholder function to simulate status updates
+    let statusMessage = "";
+    switch (nextStatus) {
+        case "tiba":
+            statusMessage = "Status updated to: Pekerja Tiba Di Lokasi";
+            break;
+        case "melayani":
+            statusMessage = "Status updated to: Pelayanan Jasa Sedang Dilakukan";
+            break;
+        case "selesai":
+            statusMessage = "Status updated to: Pesanan Selesai";
+            break;
+    }
+    alert(statusMessage);
+}
+</script>
+{% endblock %}

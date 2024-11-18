@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'discount',
     'service.apps.ServiceConfig',
     'authentication',
+    'mypay',
     'user_profile'
 ]
 
