@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'discount',
     'service.apps.ServiceConfig',
     'authentication',
-    'mypay'
+    'mypay',
+    'user_profile'
 ]
 
 MIDDLEWARE = [
