@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'discount',
-    'service.apps.ServiceConfig',
+    'service',
     'authentication',
     'user_profile'
 ]

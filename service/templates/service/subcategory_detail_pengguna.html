@@ -1,3 +1,6 @@
+{% extends 'base.html' %}
+{% block content %}
+
 {% load static %}
 <!DOCTYPE html>
 <html lang="id" data-theme="dark">
@@ -46,7 +49,7 @@
                 <h3 class="text-xl font-semibold mb-4">Pekerja</h3>
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
                     {% for worker in subcategory.workers %}
-                    <a href="{% url 'service:worker_profile' worker.id %}" 
+                    <a href="{% url 'service:worker_profile' %}" 
                        class="card bg-base-300 hover:bg-base-100 transition-colors cursor-pointer">
                         <div class="card-body p-4 text-center">
                             <h4 class="font-medium">{{ worker.name }}</h4>
@@ -200,3 +203,5 @@
     </script>
 </body>
 </html>
+
+{% endblock %}
