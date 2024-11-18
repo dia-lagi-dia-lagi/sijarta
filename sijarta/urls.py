@@ -26,7 +26,8 @@ urlpatterns = [
     # path('discount/', include('discount.urls', namespace="discount")),
     path('', include('discount.urls', namespace="discount")),
     path('', include('service.urls')),
-    path('authentication/', include('authentication.urls'))
+    path('', include('authentication.urls')),
+    path('', include('user_profile.urls'))
 ]
 
 

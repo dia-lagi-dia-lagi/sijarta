@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'discount',
     'service.apps.ServiceConfig',
-    'authentication'
+    'authentication',
+    'user_profile'
 ]
 
 MIDDLEWARE = [
