@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'discount',
     'service',
     'authentication',
+    'mypay',
     'user_profile'
 ]
 
