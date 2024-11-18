@@ -1,0 +1,202 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ subcategory.name }} - Sijarta</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.19/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-base-300">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header Information -->
+        <div class="card bg-base-200 shadow-xl mb-8">
+            <div class="card-body">
+                <h2 class="card-title text-2xl">{{ subcategory.name }}</h2>
+                <p class="text-sm text-base-content/70">{{ subcategory.category }}</p>
+                <div class="mt-4">
+                    <p class="text-base-content/80">{{ subcategory.description }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Service Sessions -->
+        <div class="card bg-base-200 shadow-xl mb-8">
+            <div class="card-body">
+                <h3 class="text-xl font-semibold mb-4">Pilihan Sesi Layanan</h3>
+                <div class="space-y-4">
+                    {% for session in subcategory.service_sessions %}
+                    <div class="flex items-center justify-between p-4 bg-base-300 rounded-lg">
+                        <div>
+                            <h4 class="font-medium">{{ session.name }}</h4>
+                            <p class="text-primary">{{ session.price }}</p>
+                        </div>
+                        <button onclick="openOrderModal('{{ session.name }}', '{{ session.price }}')" 
+                                class="btn btn-primary">Pesan</button>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Workers -->
+        <div class="card bg-base-200 shadow-xl mb-8">
+            <div class="card-body">
+                <h3 class="text-xl font-semibold mb-4">Pekerja</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                    {% for worker in subcategory.workers %}
+                    <a href="{% url 'service:worker_profile' worker.id %}" 
+                       class="card bg-base-300 hover:bg-base-100 transition-colors cursor-pointer">
+                        <div class="card-body p-4 text-center">
+                            <h4 class="font-medium">{{ worker.name }}</h4>
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Testimonials -->
+        <div class="card bg-base-200 shadow-xl">
+            <div class="card-body">
+                <h3 class="text-xl font-semibold mb-4">Testimoni</h3>
+                <div class="space-y-4">
+                    {% for testimonial in subcategory.testimonials %}
+                    <div class="bg-base-300 rounded-lg p-4">
+                        <div class="flex justify-between items-start mb-2">
+                            <div>
+                                <h4 class="font-medium">{{ testimonial.user_name }}</h4>
+                                <p class="text-sm text-base-content/70">{{ testimonial.date }}</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-medium">{{ testimonial.worker_name }}</p>
+                                <div class="rating">
+                                    {% for i in '12345'|make_list %}
+                                    <input type="radio" name="rating-{{ forloop.parentloop.counter }}" 
+                                           class="mask mask-star-2 bg-warning" 
+                                           {% if forloop.counter <= testimonial.rating %}checked{% endif %} 
+                                           disabled />
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-base-content/80">{{ testimonial.text }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+ <!-- Order Modal -->
+    <dialog id="order_modal" class="modal modal-bottom sm:modal-middle">
+        <div class="modal-box">
+            <h3 class="font-bold text-lg mb-4 text-center">Pesan Jasa</h3>
+            <form method="dialog" class="space-y-4">
+                <!-- Order Date -->
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">Tanggal Pemesanan</span>
+                    </label>
+                    <input type="date" class="input input-bordered" id="orderDate" />
+                </div>
+
+                <!-- Service Details (readonly) -->
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">Sesi Layanan</span>
+                    </label>
+                    <input type="text" class="input input-bordered" id="serviceName" readonly />
+                </div>
+
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">Harga</span>
+                    </label>
+                    <input type="text" class="input input-bordered" id="servicePrice" readonly />
+                </div>
+
+                <!-- Discount Code -->
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">Diskon</span>
+                    </label>
+                    <div class="flex gap-2">
+                        <input type="text" placeholder="Kode Diskon" class="input input-bordered flex-1" id="discountCode" />
+                        <button class="btn btn-primary" onclick="applyDiscount(event)">Apply</button>
+                    </div>
+                </div>
+
+                <!-- Total Payment -->
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">Total Pembayaran</span>
+                    </label>
+                    <input type="text" class="input input-bordered font-semibold" id="totalPayment" readonly />
+                </div>
+
+                <!-- Payment Method -->
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">Metode Pembayaran</span>
+                    </label>
+                    <select class="select select-bordered w-full">
+                        <option disabled selected>Pilih metode pembayaran</option>
+                        <option>Transfer Bank</option>
+                        <option>E-Wallet</option>
+                        <option>Virtual Account</option>
+                    </select>
+                </div>
+
+                <!-- Buttons -->
+                <div class="modal-action justify-between">
+                    <button class="btn" onclick="closeOrderModal()">Batal</button>
+                    <button class="btn btn-primary" onclick="submitOrder(event)">Pesan Jasa</button>
+                </div>
+            </form>
+        </div>
+    </dialog>
+
+    <script>
+        // Set today's date as the default
+        document.getElementById('orderDate').valueAsDate = new Date();
+
+        function openOrderModal(serviceName, servicePrice) {
+            const modal = document.getElementById('order_modal');
+            document.getElementById('serviceName').value = serviceName;
+            document.getElementById('servicePrice').value = servicePrice;
+            document.getElementById('totalPayment').value = servicePrice;  // Initial total is the service price
+            modal.showModal();
+        }
+
+        function closeOrderModal() {
+            const modal = document.getElementById('order_modal');
+            modal.close();
+        }
+
+        function applyDiscount(event) {
+            event.preventDefault();
+            const discountCode = document.getElementById('discountCode').value;
+            const servicePrice = document.getElementById('servicePrice').value;
+            let total = servicePrice;
+
+            // Mock discount logic (just for UI demonstration)
+            if (discountCode === 'DISKON10') {
+                const price = parseInt(servicePrice.replace(/[^0-9]/g, ''));
+                const discountedPrice = price * 0.9;  // 10% discount
+                total = `Rp ${discountedPrice.toLocaleString('id-ID')}`;
+            }
+
+            document.getElementById('totalPayment').value = total;
+        }
+
+        function submitOrder(event) {
+            event.preventDefault();
+            // In a real implementation, this would submit the form data
+            // For now, just close the modal
+            closeOrderModal();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sijarta - Homepage</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.19/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-base-300">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-2xl text-primary font-semibold">Home Page</h1>
+        </div>
+
+        <!-- Filters -->
+        <div class="flex flex-col sm:flex-row justify-center gap-4 mb-8">
+            <div class="form-control w-full sm:w-72">
+                <select id="categoryFilter" class="select select-bordered">
+                    <option value="all" selected>Semua kategori</option>
+                    <option>Kategori Jasa 1</option>
+                    <option>Kategori Jasa 2</option>
+                    <option>Kategori Jasa 3</option>
+                </select>
+            </div>
+            
+            <div class="form-control w-full sm:w-72">
+                <input type="text" id="subcategorySearch" placeholder="Nama Subkategori" class="input input-bordered" />
+            </div>
+
+            <button id="searchBtn" class="btn btn-primary">Search</button>
+        </div>
+
+        <!-- Categories and Subcategories -->
+        <div class="space-y-6 max-w-3xl mx-auto">
+            {% for category in categories %}
+            <details class="collapse bg-base-200 shadow-xl">
+                <summary class="collapse-title text-xl font-medium min-h-16 flex items-center justify-between">
+                    <span class="flex-grow">{{ category.name }}</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </summary>
+                <div class="collapse-content">
+                    <div class="divide-y divide-base-300 py-2">
+                        {% for subcategory in category.subcategories %}
+                        <a href="{% url 'service:subcategory_detail_pengguna' %}" 
+                           class="block py-3 px-4 hover:bg-base-300 transition-colors rounded-lg my-1">
+                            {{ subcategory }}
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </details>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('subcategorySearch');
+            const categorySelect = document.getElementById('categoryFilter');
+            const searchButton = document.getElementById('searchBtn');
+            const detailsElements = document.querySelectorAll('details');
+
+            // Add toggle listeners for arrow rotation
+            detailsElements.forEach(details => {
+                details.addEventListener('toggle', function() {
+                    const arrow = this.querySelector('svg');
+                    arrow.style.transform = this.open ? 'rotate(180deg)' : '';
+                });
+            });
+
+            function filterContent() {
+                const searchTerm = searchInput.value.toLowerCase();
+                const selectedCategory = categorySelect.value;
+
+                detailsElements.forEach(details => {
+                    const categoryTitle = details.querySelector('.collapse-title span').textContent.trim();
+                    const subcategoryLinks = details.querySelectorAll('.collapse-content a');
+                    let hasMatchingSubcategories = false;
+
+                    // First determine if this category should be shown based on dropdown selection
+                    const categoryMatches = selectedCategory === 'all' || categoryTitle === selectedCategory;
+
+                    if (categoryMatches) {
+                        // Then check subcategories for search term matches
+                        subcategoryLinks.forEach(link => {
+                            const subcategoryText = link.textContent.trim().toLowerCase();
+                            const matchesSearch = searchTerm === '' || subcategoryText.includes(searchTerm);
+                            
+                            // Show/hide individual subcategory
+                            link.style.display = matchesSearch ? 'block' : 'none';
+                            
+                            if (matchesSearch) {
+                                hasMatchingSubcategories = true;
+                            }
+                        });
+
+                        // If searching and no matches in subcategories, hide the category
+                        if (searchTerm && !hasMatchingSubcategories) {
+                            details.style.display = 'none';
+                        } else {
+                            details.style.display = 'block';
+                            // If there are matching results, open the details element
+                            if (searchTerm && hasMatchingSubcategories) {
+                                details.open = true;
+                            }
+                        }
+                    } else {
+                        details.style.display = 'none';
+                    }
+                });
+            }
+
+            searchButton.addEventListener('click', filterContent);
+
+            // Enable search on Enter key
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    filterContent();
+                }
+            });
+
+            // Initialize with all categories visible
+            filterContent();
+        });
+    </script>
+</body>
+</html>
