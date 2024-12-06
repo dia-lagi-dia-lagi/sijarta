@@ -1,3 +1,8 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
 {% load static %}
 <!DOCTYPE html>
 <html lang="id" data-theme="dark">
@@ -37,11 +42,13 @@
         <div class="space-y-6 max-w-3xl mx-auto">
             {% for category in categories %}
             <details class="collapse bg-base-200 shadow-xl">
-                <summary class="collapse-title text-xl font-medium min-h-16 flex items-center justify-between">
-                    <span class="flex-grow">{{ category.name }}</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                    </svg>
+                <summary class="collapse-title text-xl font-medium min-h-16 pr-0">
+                  <div class="flex justify-between items-center w-full">
+                      <span class="flex-grow">{{ category.name }}</span>
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                      </svg>
+                  </div>
                 </summary>
                 <div class="collapse-content">
                     <div class="divide-y divide-base-300 py-2">
@@ -130,3 +137,4 @@
     </script>
 </body>
 </html>
+{% endblock %}

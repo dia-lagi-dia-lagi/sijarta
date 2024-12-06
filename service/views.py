@@ -110,7 +110,7 @@ def subcategory_detail_pekerja(request):
                 'rating': 4
             }
         ],
-        'is_joined': False  # Flag to determine if the worker has joined this category
+        'is_joined': True  # Flag to determine if the worker has joined this category
     }
     return render(request, 'service/subcategory_detail_pekerja.html', {'subcategory': subcategory_data})
 
