@@ -9,55 +9,95 @@
             <div>
                 <img id="foto-display" src="https://example.com/photo.jpg" alt="Foto Profil" class="mt-2 w-32 h-32 rounded-lg object-cover"/>
             </div>
-            <div>
-                <span class="block text-sm font-medium text-gray-300">Nama:</span>
-                <p id="nama-display" class="text-lg text-white">Somebody</p>
+
+            <!-- 'Pekerja' Profile Fields -->
+            <div id="pekerja-profile" class="space-y-4 hidden">
+                <div>
+                    <span class="block text-sm font-medium text-gray-300">Nama:</span>
+                    <p id="nama-display" class="text-lg text-white">Somebody</p>
+                </div>
+                <div>
+                    <span class="block text-sm font-medium text-gray-300">Jenis Kelamin:</span>
+                    <p id="gender-display" class="text-lg text-white">Laki-Laki</p>
+                </div>
+                <div>
+                    <span class="block text-sm font-medium text-gray-300">No HP:</span>
+                    <p id="nohp-display" class="text-lg text-white">081234567890</p>
+                </div>
+                <div>
+                    <span class="block text-sm font-medium text-gray-300">Tanggal Lahir:</span>
+                    <p id="dob-display" class="text-lg text-white">2000-01-01</p>
+                </div>
+                <div>
+                    <span class="block text-sm font-medium text-gray-300">Alamat:</span>
+                    <p id="alamat-display" class="text-lg text-white">Jl. Contoh Alamat</p>
+                </div>
+                <div>
+                    <span class="block text-sm font-medium text-gray-300">Saldo MyPay:</span>
+                    <p id="saldo-display" class="text-lg text-gray-400">Rp 1,000,000</p>
+                </div>
+                <div>
+                    <span class="block text-sm font-medium text-gray-300">Nama Bank:</span>
+                    <p id="bank-display" class="text-lg text-white">Virtual Account BCA</p>
+                </div>
+                <div>
+                    <span class="block text-sm font-medium text-gray-300">No Rekening:</span>
+                    <p id="rekening-display" class="text-lg text-white">1234567890</p>
+                </div>
+                <div>
+                    <span class="block text-sm font-medium text-gray-300">NPWP:</span>
+                    <p id="npwp-display" class="text-lg text-white">12.345.6789</p>
+                </div>
+                <div>
+                    <span class="block text-sm font-medium text-gray-300">Rating:</span>
+                    <p id="rating-display" class="text-lg text-gray-400">4.8</p>
+                </div>
+                <div>
+                    <span class="block text-sm font-medium text-gray-300">Jumlah Pesanan Selesai:</span>
+                    <p id="orders-display" class="text-lg text-gray-400">150</p>
+                </div>
+                <div>
+                    <span class="block text-sm font-medium text-gray-300">Kategori Pekerjaan:</span>
+                    <ul id="kategori-list" class="list-disc pl-5 text-lg text-gray-400">
+                        <li>Subkategori-1</li>
+                        <li>Subkategori-2</li>
+                    </ul>
+                </div>
             </div>
-            <div>
-                <span class="block text-sm font-medium text-gray-300">Jenis Kelamin:</span>
-                <p id="gender-display" class="text-lg text-white">Laki-Laki</p>
-            </div>
-            <div>
-                <span class="block text-sm font-medium text-gray-300">No HP:</span>
-                <p id="nohp-display" class="text-lg text-white">081234567890</p>
-            </div>
-            <div>
-                <span class="block text-sm font-medium text-gray-300">Tanggal Lahir:</span>
-                <p id="dob-display" class="text-lg text-white">2000-01-01</p>
-            </div>
-            <div>
-                <span class="block text-sm font-medium text-gray-300">Alamat:</span>
-                <p id="alamat-display" class="text-lg text-white">Jl. Contoh Alamat</p>
-            </div>
-            <div>
-                <span class="block text-sm font-medium text-gray-300">Saldo MyPay:</span>
-                <p id="saldo-display" class="text-lg text-gray-400">Rp 1,000,000</p>
-            </div>
-            <div>
-                <span class="block text-sm font-medium text-gray-300">Nama Bank:</span>
-                <p id="bank-display" class="text-lg text-white">Virtual Account BCA</p>
-            </div>
-            <div>
-                <span class="block text-sm font-medium text-gray-300">No Rekening:</span>
-                <p id="rekening-display" class="text-lg text-white">1234567890</p>
-            </div>
-            <div>
-                <span class="block text-sm font-medium text-gray-300">NPWP:</span>
-                <p id="npwp-display" class="text-lg text-white">12.345.6789</p>
-            </div>
-            <div>
-                <span class="block text-sm font-medium text-gray-300">Rating:</span>
-                <p id="rating-display" class="text-lg text-gray-400">4.8</p>
-            </div>
-            <div>
-                <span class="block text-sm font-medium text-gray-300">Jumlah Pesanan Selesai:</span>
-                <p id="orders-display" class="text-lg text-gray-400">150</p>
-            </div>
-            <div>
-                <span class="block text-sm font-medium text-gray-300">Kategori Pekerjaan:</span>
-                <p id="kategori-display" class="text-lg text-gray-400">Subkategori-1</p>
+
+            <!-- 'Pengguna' Profile Fields -->
+            <div id="pengguna-profile" class="space-y-4 hidden">
+                <div>
+                    <span class="block text-sm font-medium text-gray-300">Nama:</span>
+                    <p id="nama-pengguna-display" class="text-lg text-white">Somebody</p>
+                </div>
+                <div>
+                    <span class="block text-sm font-medium text-gray-300">Level:</span>
+                    <p id="level-display" class="text-lg text-white">Level 1</p>
+                </div>
+                <div>
+                    <span class="block text-sm font-medium text-gray-300">Jenis Kelamin:</span>
+                    <p id="gender-pengguna-display" class="text-lg text-white">Laki-Laki</p>
+                </div>
+                <div>
+                    <span class="block text-sm font-medium text-gray-300">No HP:</span>
+                    <p id="nohp-pengguna-display" class="text-lg text-white">081234567890</p>
+                </div>
+                <div>
+                    <span class="block text-sm font-medium text-gray-300">Tanggal Lahir:</span>
+                    <p id="dob-pengguna-display" class="text-lg text-white">2000-01-01</p>
+                </div>
+                <div>
+                    <span class="block text-sm font-medium text-gray-300">Alamat:</span>
+                    <p id="alamat-pengguna-display" class="text-lg text-white">Jl. Contoh Alamat</p>
+                </div>
+                <div>
+                    <span class="block text-sm font-medium text-gray-300">Saldo MyPay:</span>
+                    <p id="saldo-pengguna-display" class="text-lg text-gray-400">Rp 1,000,000</p>
+                </div>
             </div>
         </div>
+
         <div class="text-center">
             <button id="update-button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:outline-none">Update</button>
         </div>
@@ -66,73 +106,118 @@
     <!-- Update Form -->
     <div id="update-form" class="hidden space-y-4">
         <form class="space-y-4">
-            <!-- Nama -->
-            <div>
-                <label for="nama" class="block text-sm font-medium text-gray-300">Nama</label>
-                <input id="nama" type="text" value="John Doe" class="w-full px-4 py-2 mt-1 bg-gray-700 text-gray-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" required />
-            </div>
+            <!-- Conditional Form Fields for 'Pekerja' and 'Pengguna' -->
+            <div id="update-pekerja-form" class="hidden">
+                <!-- Nama -->
+                <div>
+                    <label for="nama" class="block text-sm font-medium text-gray-300">Nama</label>
+                    <input id="nama" type="text" value="John Doe" class="w-full px-4 py-2 mt-1 bg-gray-700 text-gray-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" required />
+                </div>
 
-            <!-- Gender -->
-            <div>
-                <label class="block text-sm font-medium text-gray-300">Jenis Kelamin</label>
-                <div class="flex space-x-4">
-                    <label class="inline-flex items-center text-gray-300">
-                        <input type="radio" name="gender" value="Laki-Laki" class="form-radio text-blue-500" checked />
-                        <span class="ml-2">Laki-Laki</span>
-                    </label>
-                    <label class="inline-flex items-center text-gray-300">
-                        <input type="radio" name="gender" value="Perempuan" class="form-radio text-blue-500" />
-                        <span class="ml-2">Perempuan</span>
-                    </label>
+                <!-- Gender -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-300">Jenis Kelamin</label>
+                    <div class="flex space-x-4">
+                        <label class="inline-flex items-center text-gray-300">
+                            <input type="radio" name="gender" value="Laki-Laki" class="form-radio text-blue-500" checked />
+                            <span class="ml-2">Laki-Laki</span>
+                        </label>
+                        <label class="inline-flex items-center text-gray-300">
+                            <input type="radio" name="gender" value="Perempuan" class="form-radio text-blue-500" />
+                            <span class="ml-2">Perempuan</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- NoHP -->
+                <div>
+                    <label for="nohp" class="block text-sm font-medium text-gray-300">No HP</label>
+                    <input id="nohp" type="tel" value="081234567890" class="w-full px-4 py-2 mt-1 bg-gray-700 text-gray-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" required />
+                </div>
+
+                <!-- Tanggal Lahir -->
+                <div>
+                    <label for="dob" class="block text-sm font-medium text-gray-300">Tanggal Lahir</label>
+                    <input id="dob" type="date" value="1990-01-01" class="w-full px-4 py-2 mt-1 bg-gray-700 text-gray-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" required />
+                </div>
+
+                <!-- Alamat -->
+                <div>
+                    <label for="alamat" class="block text-sm font-medium text-gray-300">Alamat</label>
+                    <textarea id="alamat" rows="3" class="w-full px-4 py-2 mt-1 bg-gray-700 text-gray-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" required>Jl. Contoh Alamat</textarea>
+                </div>
+
+                <!-- Nama Bank -->
+                <div>
+                    <label for="bank" class="block text-sm font-medium text-gray-300">Nama Bank</label>
+                    <select id="bank" class="w-full px-4 py-2 mt-1 bg-gray-700 text-gray-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" required>
+                        <option value="bca" selected>Virtual Account BCA</option>
+                        <option value="gopay">GoPay</option>
+                        <option value="ovo">OVO</option>
+                        <option value="bni">Virtual Account BNI</option>
+                        <option value="mandiri">Virtual Account Mandiri</option>
+                    </select>
+                </div>
+
+                <!-- No Rekening -->
+                <div>
+                    <label for="rekening" class="block text-sm font-medium text-gray-300">No Rekening</label>
+                    <input id="rekening" type="text" value="1234567890" class="w-full px-4 py-2 mt-1 bg-gray-700 text-gray-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" required />
+                </div>
+
+                <!-- NPWP -->
+                <div>
+                    <label for="npwp" class="block text-sm font-medium text-gray-300">NPWP</label>
+                    <input id="npwp" type="text" value="12.345.678.9-012.345" class="w-full px-4 py-2 mt-1 bg-gray-700 text-gray-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" required />
+                </div>
+
+                <!-- URL Foto -->
+                <div>
+                    <label for="foto" class="block text-sm font-medium text-gray-300">URL Foto</label>
+                    <input id="foto" type="url" value="https://example.com/photo.jpg" class="w-full px-4 py-2 mt-1 bg-gray-700 text-gray-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" required />
                 </div>
             </div>
 
-            <!-- NoHP -->
-            <div>
-                <label for="nohp" class="block text-sm font-medium text-gray-300">No HP</label>
-                <input id="nohp" type="tel" value="081234567890" class="w-full px-4 py-2 mt-1 bg-gray-700 text-gray-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" required />
-            </div>
+            <div id="update-pengguna-form" class="hidden">
+                <!-- Nama -->
+                <div>
+                    <label for="nama" class="block text-sm font-medium text-gray-300">Nama</label>
+                    <input id="nama" type="text" value="John Doe" class="w-full px-4 py-2 mt-1 bg-gray-700 text-gray-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" required />
+                </div>
+                
+                <!-- Gender -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-300">Jenis Kelamin</label>
+                    <div class="flex space-x-4">
+                        <label class="inline-flex items-center text-gray-300">
+                            <input type="radio" name="gender" value="Laki-Laki" class="form-radio text-blue-500" checked />
+                            <span class="ml-2">Laki-Laki</span>
+                        </label>
+                        <label class="inline-flex items-center text-gray-300">
+                            <input type="radio" name="gender" value="Perempuan" class="form-radio text-blue-500" />
+                            <span class="ml-2">Perempuan</span>
+                        </label>
+                    </div>
+                </div>
 
-            <!-- Tanggal Lahir -->
-            <div>
-                <label for="dob" class="block text-sm font-medium text-gray-300">Tanggal Lahir</label>
-                <input id="dob" type="date" value="1990-01-01" class="w-full px-4 py-2 mt-1 bg-gray-700 text-gray-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" required />
-            </div>
+                <!-- NoHP -->
+                <div>
+                    <label for="nohp" class="block text-sm font-medium text-gray-300">No HP</label>
+                    <input id="nohp" type="tel" value="081234567890" class="w-full px-4 py-2 mt-1 bg-gray-700 text-gray-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" required />
+                </div>
 
-            <!-- Alamat -->
-            <div>
-                <label for="alamat" class="block text-sm font-medium text-gray-300">Alamat</label>
-                <textarea id="alamat" rows="3" class="w-full px-4 py-2 mt-1 bg-gray-700 text-gray-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" required>Jl. Contoh Alamat</textarea>
-            </div>
+                <!-- Tanggal Lahir -->
+                <div>
+                    <label for="dob" class="block text-sm font-medium text-gray-300">Tanggal Lahir</label>
+                    <input id="dob" type="date" value="1990-01-01" class="w-full px-4 py-2 mt-1 bg-gray-700 text-gray-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" required />
+                </div>
 
-            <!-- Nama Bank -->
-            <div>
-                <label for="bank" class="block text-sm font-medium text-gray-300">Nama Bank</label>
-                <select id="bank" class="w-full px-4 py-2 mt-1 bg-gray-700 text-gray-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" required>
-                    <option value="bca" selected>Virtual Account BCA</option>
-                    <option value="gopay">GoPay</option>
-                    <option value="ovo">OVO</option>
-                    <option value="bni">Virtual Account BNI</option>
-                    <option value="mandiri">Virtual Account Mandiri</option>
-                </select>
-            </div>
-
-            <!-- No Rekening -->
-            <div>
-                <label for="rekening" class="block text-sm font-medium text-gray-300">No Rekening</label>
-                <input id="rekening" type="text" value="1234567890" class="w-full px-4 py-2 mt-1 bg-gray-700 text-gray-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" required />
-            </div>
-
-            <!-- NPWP -->
-            <div>
-                <label for="npwp" class="block text-sm font-medium text-gray-300">NPWP</label>
-                <input id="npwp" type="text" value="12.345.678.9-012.345" class="w-full px-4 py-2 mt-1 bg-gray-700 text-gray-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" required />
-            </div>
-
-            <!-- URL Foto -->
-            <div>
-                <label for="foto" class="block text-sm font-medium text-gray-300">URL Foto</label>
-                <input id="foto" type="url" value="https://example.com/photo.jpg" class="w-full px-4 py-2 mt-1 bg-gray-700 text-gray-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" required />
+                <!-- Alamat -->
+                <div>
+                    <label for="alamat" class="block text-sm font-medium text-gray-300">Alamat</label>
+                    <textarea id="alamat" rows="3" class="w-full px-4 py-2 mt-1 bg-gray-700 text-gray-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" required>Jl. Contoh Alamat</textarea>
+                </div>
+                <!-- Add other pengguna-specific fields here -->
             </div>
 
             <!-- Save Button -->
@@ -144,6 +229,26 @@
 </div>
 
 <script>
+    const userType = "pengguna";  // Change this dynamically to either 'pekerja' or 'pengguna'
+
+    const pekerjaProfile = document.getElementById('pekerja-profile');
+    const penggunaProfile = document.getElementById('pengguna-profile');
+    const updatePekerjaForm = document.getElementById('update-pekerja-form');
+    const updatePenggunaForm = document.getElementById('update-pengguna-form');
+
+    // Show and hide based on user type
+    if (userType === 'pekerja') {
+        pekerjaProfile.classList.remove('hidden');
+        penggunaProfile.classList.add('hidden');
+        updatePekerjaForm.classList.remove('hidden');
+        updatePenggunaForm.classList.add('hidden');
+    } else if (userType === 'pengguna') {
+        pekerjaProfile.classList.add('hidden');
+        penggunaProfile.classList.remove('hidden');
+        updatePekerjaForm.classList.add('hidden');
+        updatePenggunaForm.classList.remove('hidden');
+    }
+
     const updateButton = document.getElementById('update-button');
     const profileDetails = document.getElementById('profile-details');
     const updateForm = document.getElementById('update-form');

@@ -6,15 +6,14 @@
     
     <!-- Navbar for Guest (Login and Register) -->
     <div id="navbar-guest" class="hidden">
-      <a class="btn btn-outline text-white border-white hover:bg-white hover:text-gray-600" href="#login">Login</a>
-      <a class="btn btn-outline text-white border-white hover:bg-white hover:text-gray-600" href="#register">Register</a>
+      <a href="{% url 'authentication:login' %}" class="btn btn-outline text-white border-white hover:bg-white hover:text-gray-600" href="#login">Login</a>
+      <a href="{% url 'authentication:register' %}" class="btn btn-outline text-white border-white hover:bg-white hover:text-gray-600" href="#register">Register</a>
     </div>
 
     <!-- Navbar for Pengguna -->
     <div id="navbar-pengguna" class="flex items-center hidden">
       <div>
-        <span class="font-semibold ml-2 mr-4">Pengguna</span>
-        <span>John Doe</span>
+        <span class="font-semibold ml-2 mr-4">Pengguna: John Doe</span>
       </div>
       <ul class="menu menu-horizontal p-0 flex space-x-4">
         <li><a href="#homepage">Homepage</a></li>
@@ -29,8 +28,7 @@
     <!-- Navbar for Pekerja -->
     <div id="navbar-pekerja" class="flex items-center hidden">
       <div>
-        <span class="font-semibold ml-2 mr-4">Pekerja</span>
-        <span>Somebody</span>
+        <span class="font-semibold ml-2 mr-4">Pekerja: Somebody</span>
       </div>
       <ul class="menu menu-horizontal p-0 flex space-x-4">
         <li><a href="#homepage">Homepage</a></li>
@@ -52,7 +50,7 @@
   const navbarPekerja = document.getElementById('navbar-pekerja');
 
   // Simulated user roles: 'guest', 'pengguna', or 'pekerja'
-  const userRole = 'pengguna'; // Change this value to test the different navbars
+  const userRole = 'guest'; // Change this value to test the different navbars
 
   if (userRole === 'guest') {
     navbarGuest.classList.remove('hidden');
