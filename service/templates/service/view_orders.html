@@ -78,14 +78,22 @@
             >
               Batalkan
             </button>
-            {% elif order.status == 'Pesanan Selesai' and not order.has_testimonial %}
+            {% elif order.status == 'Pesanan selesai' and not order.has_testimonial %}
             <button
               class="btn btn-primary"
               onclick="openTestimonialModal('{{ order.id }}')"
             >
               Buat Testimoni
             </button>
+            {% elif order.status == 'Pesanan selesai' and order.has_testimonial %}
+            <button
+              class="btn btn-error"
+              onclick="hapusTestimoni('{{ order.id }}')"
+            >
+              Hapus Testimoni
+            </button>
             {% endif %}
+            
           </div>
         </div>
       </div>
@@ -110,39 +118,18 @@
         <label class="label">
           <span class="label-text">Rating</span>
         </label>
-        <div class="rating gap-1">
-          <input
-            type="radio"
-            name="rating"
-            value="1"
-            class="mask mask-star-2 bg-warning"
-            required
-          />
-          <input
-            type="radio"
-            name="rating"
-            value="2"
-            class="mask mask-star-2 bg-warning"
-          />
-          <input
-            type="radio"
-            name="rating"
-            value="3"
-            class="mask mask-star-2 bg-warning"
-          />
-          <input
-            type="radio"
-            name="rating"
-            value="4"
-            class="mask mask-star-2 bg-warning"
-          />
-          <input
-            type="radio"
-            name="rating"
-            value="5"
-            class="mask mask-star-2 bg-warning"
-          />
-        </div>
+        <div class="rating">
+            <input type="radio" name="rating-2" value='1' class="mask mask-star-2 bg-orange-400" />
+            <input
+              type="radio"
+              name="rating-2"
+              class="mask mask-star-2 bg-orange-400"
+              checked="checked"
+              value='2' />
+            <input type="radio" name="rating-2" value='3' class="mask mask-star-2 bg-orange-400" />
+            <input type="radio" name="rating-2" value='4'class="mask mask-star-2 bg-orange-400" />
+            <input type="radio" name="rating-2" value='5' class="mask mask-star-2 bg-orange-400" />
+          </div>
       </div>
 
       <!-- Testimonial Text -->
@@ -222,7 +209,7 @@
   async function submitTestimonial(event) {
     event.preventDefault();
     const form = event.target;
-    const rating = form.querySelector('input[name="rating"]:checked').value;
+    const rating = form.querySelector('input[name="rating-2"]:checked').value;
     const text = form.querySelector('textarea[name="testimonialText"]').value;
 
     try {
@@ -294,6 +281,36 @@
     }
     return cookieValue;
   }
+
+  async function hapusTestimoni(orderId) {
+  if (!confirm("Apakah Anda yakin ingin menghapus testimoni ini?")) {
+    return;
+  }
+
+  try {
+    const response = await fetch('{% url "service:delete_testimonial" %}', {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "X-CSRFToken": getCookie("csrftoken"),
+      },
+      body: new URLSearchParams({
+        order_id: orderId,
+      }),
+    });
+
+    const data = await response.json();
+    if (data.success) {
+      alert('Testimoni berhasil dihapus');
+      window.location.reload();  // Reload the page to reflect changes
+    } else {
+      alert("Error: " + data.message);
+    }
+  } catch (error) {
+    alert("Error deleting testimonial");
+  }
+}
+
 </script>
 
 {% endblock %}

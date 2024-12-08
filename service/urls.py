@@ -12,4 +12,5 @@ urlpatterns = [
     path('api/submit-testimonial/', views.submit_testimonial, name='submit_testimonial'),
     path('api/cancel-order/', views.cancel_order, name='cancel_order'),
     path('api/submit-order/', views.submit_order, name='submit_order'),
+    path('api/delete_testimonial/', views.delete_testimonial, name='delete_testimonial'),
 ]

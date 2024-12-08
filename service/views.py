@@ -533,3 +533,40 @@ def worker_profile(request):
         'profile_image': None  # In a real implementation, this would be an image URL
     }
     return render(request, 'service/worker_profile.html', {'worker': worker_data})
+
+
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.db import connection
+
+@csrf_exempt
+def delete_testimonial(request):
+    if request.method == 'POST':
+        # Get the transaction ID (order ID) from the POST request
+        order_id = request.POST.get('order_id')
+
+        if not order_id:
+            return JsonResponse({'success': False, 'message': 'Order ID is required'})
+
+        # Execute the query to delete the testimonial based on the order ID
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                DELETE FROM TESTIMONI
+                WHERE id_tr_pemesanan_jasa = %s
+            """, [order_id])
+        
+        # Check if the delete operation was successful
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                SELECT * FROM TESTIMONI
+                WHERE id_tr_pemesanan_jasa = %s
+            """, [order_id])
+            testimonial = cursor.fetchone()
+        
+        # If no testimonial found, return success
+        if not testimonial:
+            return JsonResponse({'success': True, 'message': 'Testimonial deleted successfully'})
+        
+        return JsonResponse({'success': False, 'message': 'Error deleting testimonial'})
+
+    return JsonResponse({'success': False, 'message': 'Invalid request method'})

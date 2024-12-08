@@ -406,3 +406,7 @@ SELECT id_tr_pemesanan_jasa, pl.nama AS nama_pelanggan, pk.nama AS nama_pekerja,
                         JOIN USERS pl ON pl.id_user = tpj.id_pelanggan
                         JOIN USERS pk ON pk.id_user = tpj.id_pekerja
                         WHERE id_tr_pemesanan_jasa='1f58bc66-d1e7-43bb-890d-c24d5e8805ea'
+
+INSERT INTO TESTIMONI VALUES 
+
+('ded468ce-251a-4834-bb0d-9dd2347ad864', '2024-09-20', 'Pekerjaan rapi dan cepat selesai.')
