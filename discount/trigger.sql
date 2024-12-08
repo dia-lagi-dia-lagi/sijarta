@@ -23,16 +23,6 @@ END IF;
 
 
 
-
---- Check if its a voucher
---- Voucher
---- Search in TR_PEMESANAN_JASA using the idPelanngan
---- count how many rows are there
---- if the rows exceed the Voucher Limit -> Error
---- Count how many days from purchaes to the time limit
---- If the time limit exceeds it -> Error
-
-
 END;
 $$
 LANGUAGE plpgsql;
@@ -40,3 +30,7 @@ LANGUAGE plpgsql;
 CREATE TRIGGER trg_validate_voucher_usage()
 BEFORE INSERT OR UPDATE ON TR_PEMESANAN_JASA
 FOR EACH ROW EXECUTE PROCEDURE validate_voucher_usage();
+
+ SELECT COUNT(*) FROM TR_PEMESANAN_JASA 
+WHERE id_pelanggan = '8192ca83-c52d-4350-8fa5-64b09cfc96b5' AND
+id_diskon = 'SPESIALRUMAH2024';

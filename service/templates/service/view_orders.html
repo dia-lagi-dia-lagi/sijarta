@@ -1,151 +1,316 @@
-{% extends 'base.html' %}
-{% block content %}
-
+{% extends 'base.html' %} 
+{% block content %} 
 {% load static %}
-<!DOCTYPE html>
-<html lang="id" data-theme="dark">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pesanan Jasa - Sijarta</title>
-    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.19/dist/full.min.css" rel="stylesheet" type="text/css" />
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="min-h-screen bg-base-300">
-    <div class="container mx-auto px-4 py-8">
-        <h1 class="text-2xl font-bold mb-8">Pesanan Jasa</h1>
 
-        <!-- Filters -->
-        <div class="flex flex-col sm:flex-row gap-4 mb-8">
-            <select class="select select-bordered w-full sm:w-64">
-                <option disabled selected>Subkategori</option>
-                {% for subcat in data.subcategories %}
-                <option value="{{ subcat.id }}">{{ subcat.name }}</option>
-                {% endfor %}
-            </select>
+<div class="container mx-auto px-4 py-8">
+  <h1 class="text-2xl font-bold mb-8">Pesanan Jasa</h1>
 
-            <select class="select select-bordered w-full sm:w-64">
-                <option disabled selected>Status Pesanan</option>
-                {% for status in data.status_options %}
-                <option value="{{ status }}">{{ status }}</option>
-                {% endfor %}
-            </select>
+  <!-- Filters -->
+  <div class="flex flex-col sm:flex-row gap-4 mb-8">
+    <select
+      id="subcategoryFilter"
+      class="select select-bordered w-full sm:w-64"
+    >
+      <option value="">Semua Subkategori</option>
+      {% for subcat in data.subcategories %}
+      <option value="{{ subcat.name }}">{{ subcat.name }}</option>
+      {% endfor %}
+    </select>
 
-            <div class="form-control w-full sm:w-64">
-                <input type="text" placeholder="Search" class="input input-bordered" />
-            </div>
+    <select id="statusFilter" class="select select-bordered w-full sm:w-64">
+      <option value="">Semua Status</option>
+      {% for status in data.status_options %}
+      <option value="{{ status }}">{{ status }}</option>
+      {% endfor %}
+    </select>
 
-            <button class="btn btn-primary w-full sm:w-auto">Search</button>
-        </div>
-
-        <!-- Orders List -->
-        <div class="space-y-4">
-            {% for order in data.orders %}
-            <div class="card bg-base-200 shadow-xl">
-                <div class="card-body">
-                    <div class="flex flex-col lg:flex-row justify-between gap-4">
-                        <!-- Order Details -->
-                        <div class="grid grid-cols-2 md:grid-cols-5 gap-4 flex-grow">
-                            <div>
-                                <h3 class="font-semibold">Subkategori Jasa</h3>
-                                <p>{{ order.subcategory }}</p>
-                            </div>
-                            <div>
-                                <h3 class="font-semibold">Sesi Layanan</h3>
-                                <p>{{ order.service_session }}</p>
-                            </div>
-                            <div>
-                                <h3 class="font-semibold">Harga</h3>
-                                <p>{{ order.price }}</p>
-                            </div>
-                            <div>
-                                <h3 class="font-semibold">Nama Pekerja</h3>
-                                <p>{{ order.worker_name }}</p>
-                            </div>
-                            <div>
-                                <h3 class="font-semibold">Status</h3>
-                                <p>{{ order.status }}</p>
-                            </div>
-                        </div>
-
-                        <!-- Action Button -->
-                        <div class="flex items-center justify-end">
-                            {% if order.status == 'Menunggu Pembayaran' or order.status == 'Mencari Pekerja Terdekat' %}
-                                <button class="btn btn-error">Batalkan</button>
-                            {% elif order.status == 'Pesanan Selesai' and not order.has_testimonial %}
-                                <button class="btn btn-primary" onclick="openTestimonialModal('{{ order.id }}')">
-                                    Buat Testimoni
-                                </button>
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
+    <div class="form-control w-full sm:w-64">
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="Search"
+        class="input input-bordered"
+      />
     </div>
+  </div>
 
-    <!-- Testimonial Modal -->
-    <dialog id="testimonial_modal" class="modal">
-        <div class="modal-box">
-            <h3 class="font-bold text-lg mb-4">Buat Testimoni</h3>
-            <form method="dialog" class="space-y-4">
-                <!-- Rating -->
-                <div class="form-control">
-                    <label class="label">
-                        <span class="label-text">Rating</span>
-                    </label>
-                    <div class="rating gap-1">
-                        <input type="radio" name="rating" value="1" class="mask mask-star-2 bg-warning"/>
-                        <input type="radio" name="rating" value="2" class="mask mask-star-2 bg-warning"/>
-                        <input type="radio" name="rating" value="3" class="mask mask-star-2 bg-warning"/>
-                        <input type="radio" name="rating" value="4" class="mask mask-star-2 bg-warning"/>
-                        <input type="radio" name="rating" value="5" class="mask mask-star-2 bg-warning"/>
-                    </div>
-                </div>
+  <!-- Orders List -->
+  <div class="space-y-4">
+    {% for order in data.orders %}
+    <div
+      class="card bg-base-200 shadow-xl order-item"
+      data-subcategory="{{ order.subcategory }}"
+      data-status="{{ order.status }}"
+      data-search="{{ order.subcategory|lower }} {{ order.worker_name|lower }}"
+    >
+      <div class="card-body">
+        <div class="grid gap-4 grid-cols-12">
+          <!-- Order Details -->
+          <div class="grid col-span-10 grid-cols-5 gap-4">
+            <div>
+              <h3 class="font-semibold">Subkategori Jasa</h3>
+              <p>{{ order.subcategory }}</p>
+            </div>
+            <div>
+              <h3 class="font-semibold">Sesi Layanan</h3>
+              <p>{{ order.service_session }}</p>
+            </div>
+            <div>
+              <h3 class="font-semibold">Harga</h3>
+              <p>{{ order.price }}</p>
+            </div>
+            <div>
+              <h3 class="font-semibold">Nama Pekerja</h3>
+              <p>{{ order.worker_name }}</p>
+            </div>
+            <div>
+              <h3 class="font-semibold">Status</h3>
+              <p>{{ order.status }}</p>
+            </div>
+          </div>
 
-                <!-- Testimonial Text -->
-                <div class="form-control">
-                    <label class="label">
-                        <span class="label-text">Teks Testimoni</span>
-                    </label>
-                    <textarea class="textarea textarea-bordered h-24" placeholder="Tulis testimoni Anda"></textarea>
-                </div>
-
-                <!-- Buttons -->
-                <div class="modal-action">
-                    <button class="btn" onclick="closeTestimonialModal()">Batal</button>
-                    <button class="btn btn-primary" onclick="submitTestimonial(event)">Kirim Testimoni</button>
-                </div>
-            </form>
+          <!-- Action Button -->
+          <div class="col-span-2 flex items-center justify-end">
+            {% if order.status == 'Menunggu Pembayaran' or order.status == 'Mencari Pekerja Terdekat' %}
+            <button
+              class="btn btn-error"
+              onclick="cancelOrder('{{ order.id }}')"
+            >
+              Batalkan
+            </button>
+            {% elif order.status == 'Pesanan selesai' and not order.has_testimonial %}
+            <button
+              class="btn btn-primary"
+              onclick="openTestimonialModal('{{ order.id }}')"
+            >
+              Buat Testimoni
+            </button>
+            {% elif order.status == 'Pesanan selesai' and order.has_testimonial %}
+            <button
+              class="btn btn-error"
+              onclick="hapusTestimoni('{{ order.id }}')"
+            >
+              Hapus Testimoni
+            </button>
+            {% endif %}
+            
+          </div>
         </div>
-    </dialog>
+      </div>
+    </div>
+    {% empty %}
+    <div class="text-center py-8">Tidak ada pesanan ditemukan</div>
+    {% endfor %}
+  </div>
+    <!-- No Results Message (Hidden by default) -->
+  <div id="noResultsMessage" class="text-center py-8 hidden">
+    Tidak ada pesanan yang sesuai dengan filter yang dipilih
+  </div>
+</div>
 
-    <script>
-        function openTestimonialModal(orderId) {
-            const modal = document.getElementById('testimonial_modal');
-            modal.setAttribute('data-order-id', orderId);
-            modal.showModal();
+<!-- Testimonial Modal -->
+<dialog id="testimonial_modal" class="modal">
+  <div class="modal-box">
+    <h3 class="font-bold text-lg mb-4">Buat Testimoni</h3>
+    <form id="testimonialForm" onsubmit="submitTestimonial(event)">
+      <!-- Rating -->
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text">Rating</span>
+        </label>
+        <div class="rating">
+            <input type="radio" name="rating-2" value='1' class="mask mask-star-2 bg-orange-400" />
+            <input
+              type="radio"
+              name="rating-2"
+              class="mask mask-star-2 bg-orange-400"
+              checked="checked"
+              value='2' />
+            <input type="radio" name="rating-2" value='3' class="mask mask-star-2 bg-orange-400" />
+            <input type="radio" name="rating-2" value='4'class="mask mask-star-2 bg-orange-400" />
+            <input type="radio" name="rating-2" value='5' class="mask mask-star-2 bg-orange-400" />
+          </div>
+      </div>
+
+      <!-- Testimonial Text -->
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text">Teks Testimoni</span>
+        </label>
+        <textarea
+          name="testimonialText"
+          class="textarea textarea-bordered h-24"
+          required
+        ></textarea>
+      </div>
+
+      <!-- Buttons -->
+      <div class="modal-action">
+        <button type="button" class="btn" onclick="closeTestimonialModal()">
+          Batal
+        </button>
+        <button type="submit" class="btn btn-primary">Kirim Testimoni</button>
+      </div>
+    </form>
+  </div>
+</dialog>
+
+<script>
+  let currentOrderId = null;
+
+  // Filter functionality
+  function filterOrders() {
+    const subcategory = document
+      .getElementById("subcategoryFilter")
+      .value.toLowerCase();
+    const status = document.getElementById("statusFilter").value;
+    const search = document.getElementById("searchInput").value.toLowerCase();
+
+    document.querySelectorAll(".order-item").forEach((order) => {
+      const orderSubcategory = order.dataset.subcategory.toLowerCase();
+      const orderStatus = order.dataset.status;
+      const searchText = order.dataset.search;
+
+      const matchesSubcategory =
+        !subcategory || orderSubcategory === subcategory;
+      const matchesStatus = !status || orderStatus === status;
+      const matchesSearch = !search || searchText.includes(search);
+
+      order.style.display =
+        matchesSubcategory && matchesStatus && matchesSearch ? "block" : "none";
+    });
+  }
+
+  // Add event listeners for filters
+  document
+    .getElementById("subcategoryFilter")
+    .addEventListener("change", filterOrders);
+  document
+    .getElementById("statusFilter")
+    .addEventListener("change", filterOrders);
+  document
+    .getElementById("searchInput")
+    .addEventListener("input", filterOrders);
+
+  // Testimonial modal functions
+  function openTestimonialModal(orderId) {
+    currentOrderId = orderId;
+    const modal = document.getElementById("testimonial_modal");
+    modal.showModal();
+  }
+
+  function closeTestimonialModal() {
+    const modal = document.getElementById("testimonial_modal");
+    modal.close();
+    document.getElementById("testimonialForm").reset();
+    currentOrderId = null;
+  }
+
+  async function submitTestimonial(event) {
+    event.preventDefault();
+    const form = event.target;
+    const rating = form.querySelector('input[name="rating-2"]:checked').value;
+    const text = form.querySelector('textarea[name="testimonialText"]').value;
+
+    try {
+      const response = await fetch('{% url "service:submit_testimonial" %}', {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "X-CSRFToken": getCookie("csrftoken"),
+        },
+        body: new URLSearchParams({
+          order_id: currentOrderId,
+          rating: rating,
+          text: text,
+        }),
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        window.location.reload();
+      } else {
+        alert("Error: " + data.message);
+      }
+    } catch (error) {
+      alert("Error submitting testimonial");
+    }
+  }
+
+  // Cancel order function
+  async function cancelOrder(orderId) {
+    if (!confirm("Apakah Anda yakin ingin membatalkan pesanan ini?")) {
+      return;
+    }
+
+    try {
+      const response = await fetch('{% url "service:cancel_order" %}', {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "X-CSRFToken": getCookie("csrftoken"),
+        },
+        body: new URLSearchParams({
+          order_id: orderId,
+        }),
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        window.location.reload();
+      } else {
+        alert("Error: " + data.message);
+      }
+    } catch (error) {
+      alert("Error canceling order");
+    }
+  }
+
+  // Helper function to get CSRF token
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== "") {
+      const cookies = document.cookie.split(";");
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        if (cookie.substring(0, name.length + 1) === name + "=") {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
         }
+      }
+    }
+    return cookieValue;
+  }
 
-        function closeTestimonialModal() {
-            const modal = document.getElementById('testimonial_modal');
-            modal.close();
-        }
+  async function hapusTestimoni(orderId) {
+  if (!confirm("Apakah Anda yakin ingin menghapus testimoni ini?")) {
+    return;
+  }
 
-        function submitTestimonial(event) {
-            event.preventDefault();
-            // In a real implementation, this would submit the testimonial
-            // For now, just close the modal
-            closeTestimonialModal();
-        }
+  try {
+    const response = await fetch('{% url "service:delete_testimonial" %}', {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "X-CSRFToken": getCookie("csrftoken"),
+      },
+      body: new URLSearchParams({
+        order_id: orderId,
+      }),
+    });
 
-        // Filter functionality
-        document.querySelector('.btn-primary').addEventListener('click', function() {
-            // In a real implementation, this would filter the orders
-            console.log('Filtering orders...');
-        });
-    </script>
-</body>
-</html>
+    const data = await response.json();
+    if (data.success) {
+      alert('Testimoni berhasil dihapus');
+      window.location.reload();  // Reload the page to reflect changes
+    } else {
+      alert("Error: " + data.message);
+    }
+  } catch (error) {
+    alert("Error deleting testimonial");
+  }
+}
+
+</script>
+
 {% endblock %}

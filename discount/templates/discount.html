@@ -27,16 +27,29 @@
             font-size: 4em; /* Adjust as needed for a very large size */
         }
 
+        .success-message {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .description-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
   
 </style>
 
 <div class="container">
   <h1 class="big-header">Diskon</h1>
 </div>
+
 <div class="divider  text-2xl">Voucher</div>
 
 <div class="overflow-x-auto w-full p-4">
-  <div class="flex justify-center gap-7">
+  <div class="flex gap-7" >
       {% for voucher in vouchers %}
         <div class="card bg-base-100 w-96 shadow-xl join-item" style="border: 4px solid #505050;">
             <figure>
@@ -72,35 +85,50 @@
               <div class="card-actions justify-end">
                 <!-- Open the modal using ID.showModal() method -->
                 <button class="btn btn-primary" onclick="{{ voucher.0}}.showModal()">Buy Now</button>
-                <dialog id="{{ voucher.0}}" class="modal modal-bottom sm:modal-middle">
+                <dialog id="{{ voucher.0 }}" class="modal modal-bottom sm:modal-middle">
                   <div class="modal-box">
                     <h3 class="text-lg font-bold">Beli Voucher</h3>
                     <br><br>
-              
-                    <!-- Flex container for label and dropdown -->
-                    <div class="flex items-center gap-4">
-                      <p class="whitespace-nowrap">Metode Pembayaran</p>
-                      <select class="select select-bordered w-full max-w-xs">
-                        <option disabled selected>Pilih Metode Pembayaran</option>
-                        {% for metode_bayar in metode_pembayaran %}
-                        <option value="{{metode_bayar.0}}">{{metode_bayar.1}}</option>
-                        {% endfor %}
-                      </select>
-                    </div>
-              
-                    <!-- Centered and spaced Beli button -->
-                   
-              
-                    <div class="modal-action">
-                      <button class="btn btn-primary">Beli</button>
-                      <form method="dialog">
-                        <!-- if there is a button in form, it will close the modal -->
-                        
-                        <button class="btn">Cancel</button>
-                      </form>
-                    </div>
+                
+                    <!-- Form to submit payment method -->
+                    <form id="paymentForm-{{ voucher.0}}" action="{% url 'discount:insert_into_tr_pembelian_voucher' %}" method="POST" onsubmit="return false;">
+                      {% csrf_token %}
+                      <input type="hidden" name="id_voucher" value="{{ voucher.0 }}">
+                      <input type="hidden" name="kuota_penggunaan" value="{{ voucher.4 }}">
+                      <input type="hidden" name="jumlah_hari_berlaku" value="{{ voucher.3 }}">
+                      <!-- Flex container for label and dropdown -->
+                      <div class="flex items-center gap-4">
+                        <p class="whitespace-nowrap">Metode Pembayaran</p>
+                        <select
+                        id="metodePembayaranSelect"
+                        name="metode_pembayaran"
+                        class="select select-bordered w-full max-w-xs"
+                        onchange="checkPaymentMethod('{{ voucher.0 }}')"
+                        >
+                          <option disabled selected>Pilih Metode Pembayaran</option>
+                          {% for metode_bayar in metode_pembayaran %}
+                            <option value="{{ metode_bayar.0 }}">{{ metode_bayar.1 }}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
+                    
+                      <!-- Centered and spaced Beli button -->
+                      <div class="modal-action">
+                        <button
+                          id="beliButton-{{ voucher.0 }}"
+                          class="btn btn-primary"
+                          type="button"
+                          disabled
+                          onclick="submitPaymentForm('{{ voucher.0 }}')"
+                        >Beli</button>
+                        <!-- Cancel button closes the modal -->
+                        <button type="button" class="btn" onclick="document.getElementById('{{ voucher.0 }}').close()">Cancel</button>
+                      </div>
+                    </form>
+                    
                   </div>
                 </dialog>
+                
               </div>
             </div>
           </div>
@@ -109,10 +137,10 @@
 </div>
 <div></div>
 <div></div>
-<div class="divider text-2xl">Promo</div>
+<div class="divider text-2xl" style="margin-top: 50px;">Promo</div>
 
 <div class="overflow-x-auto w-full">
-  <div class="flex justify-center gap-7">
+  <div class="flex  gap-7">
     {% for promo in promos %}
       <div class="card bg-base-100 w-96 shadow-xl" style="border: 4px solid #505050;">
           <figure>
@@ -137,8 +165,144 @@
 
 </div>
 <div></div>
+<dialog id="errorModal" class="modal modal-bottom sm:modal-middle">
+  <div class="modal-box">
+    <h3 class="text-lg font-bold" style="margin-bottom:20px">Pembelian Gagal</h3>
+
+    <p id="errorMessage"></p>
+    <div class="modal-action">
+      <button type="button" class="btn" onclick="document.getElementById('errorModal').close()">Close</button>
+    </div>
+  </div>
+</dialog>
+
+<dialog id="successModal" class="modal modal-bottom sm:modal-middle">
+  <div class="modal-box">
+    <h3 class="text-lg font-bold" style="margin-bottom: 20px">Pembelian Sukses</h3>
+    <div id="successMessageContainer" class="success-message">
+      <!-- Content will be dynamically inserted here -->
+    </div>
+    <div class="modal-action">
+      <button type="button" class="btn" onclick="document.getElementById('successModal').close()">Close</button>
+    </div>
+  </div>
+</dialog>
+
    
- 
+<script>
+
+function checkPaymentMethod(voucherId) {
+    const selectElement = document.getElementById('metodePembayaranSelect');
+    const beliButton = document.getElementById(`beliButton-${voucherId}`);
+    
+    if (selectElement.value) {
+      beliButton.disabled = false; // Enable button if a value is selected
+    } else {
+      beliButton.disabled = true; // Keep button disabled otherwise
+    }
+  }
+  
+  async function submitPaymentForm(voucherId) {
+    const form = document.getElementById(`paymentForm-${voucherId}`);
+    const formData = new FormData(form);
+
+    try {
+        // Send the POST request with form data
+        const response = await fetch(form.action, {
+            method: 'POST',
+            body: formData,
+        });
+
+        if (response.ok) {
+            const result = await response.json();
+
+            // Extract relevant data
+            const voucherCode = formData.get("id_voucher");
+            const daysValid = parseInt(formData.get("jumlah_hari_berlaku"), 10);
+            const usageQuota = formData.get("kuota_penggunaan");
+
+            // Calculate the expiry date
+            const currentDate = new Date();
+            const expiryDate = new Date(currentDate.setDate(currentDate.getDate() + daysValid));
+            const formattedExpiryDate = expiryDate.toLocaleDateString("en-US", {
+                month: "short",
+                day: "numeric",
+                year: "numeric",
+            });
+
+            // Populate success modal content
+            const successMessageContainer = document.getElementById("successMessageContainer");
+            successMessageContainer.innerHTML = `
+              <div class="description-container">
+                <p class="description">Berhasil membeli voucher kode:</p>
+                <p class="data">${voucherCode}</p>
+              </div>
+              <div class="description-container">
+                <p class="description">Berlaku hingga:</p>
+                <p class="data">${formattedExpiryDate}</p>
+              </div>
+              <div class="description-container">
+                <p class="description">Kuota Penggunaan:</p>
+                <p class="data">${usageQuota}</p>
+              </div>
+            `;
+
+            const voucherModal = document.getElementById(voucherId);
+            voucherModal.close(); // Close the voucher modal
+
+            // Show success modal
+            const successModal = document.getElementById("successModal");
+            successModal.showModal();
+        } else {
+            const errorResult = await response.json();
+            const errorMessage = errorResult.error
+                ? extractRelevantErrorMessage(errorResult.error)
+                : "Payment failed: An unknown error occurred.";
+            showErrorModal(errorMessage);
+        }
+    } catch (error) {
+        showErrorModal("A network error occurred: " + error.message);
+    }
+}
+
+
+// Function to extract the relevant part of the error message
+function extractRelevantErrorMessage(errorText) {
+    // Remove the "CONTEXT" string from the errorText
+    const cleanedText = errorText.replace(/CONTEXT/g, '');
+
+    // Split by ':' and take the last part
+    const parts = cleanedText.split(':');
+    
+    return parts.length > 1 ? parts[parts.length - 2].trim() : cleanedText.trim();
+}
+
+
+// Function to show the error modal
+function showErrorModal(message) {
+    const errorModal = document.getElementById('errorModal');
+    const errorMessageElement = document.getElementById('errorMessage');
+    errorMessageElement.textContent = message; // Set the error message
+    errorModal.showModal(); // Display the modal
+}
+
+function showSuccessModal(voucherCode, expiryDate, kuotaPenggunaan) {
+    const successModal = document.getElementById('successModal');
+    const successMessageElement = document.getElementById('successMessage');
+
+    // Create the success message
+    const successMessage = `
+        Berhasil membeli voucher kode ${voucherCode} <br>
+        Berlaku hingga tanggal: ${expiryDate} <br>
+        Kuota Penggunaan: ${kuotaPenggunaan}
+    `;
+
+    successMessageElement.innerHTML = successMessage; // Set the success message
+    successModal.showModal(); // Display the modal
+}
+
+
+</script>
   
     
 
