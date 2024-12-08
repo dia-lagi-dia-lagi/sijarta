@@ -1,0 +1,324 @@
+{% extends 'base.html' %} {% block content %} {% load static %}
+
+<div class="container mx-auto px-4 py-8">
+  {# Card for subcategory header #}
+  <div class="card bg-base-200 shadow-xl mb-8">
+    <div class="card-body">
+      <div class="flex justify-between items-start">
+        <div>
+          <h2 class="card-title text-2xl">{{ subcategory.name }}</h2>
+          <p>{{ subcategory.category }}</p>
+        </div>
+        {% if is_worker_view %}
+        <div class="text-right">Mode Pekerja</div>
+        {% endif %}
+      </div>
+      <div class="mt-4">{{ subcategory.description }}</div>
+    </div>
+  </div>
+
+  {# Card for service sessions #}
+  <div class="card bg-base-200 shadow-xl mb-8">
+    <div class="card-body">
+      <h3 class="text-xl font-semibold mb-4">Pilihan Sesi Layanan</h3>
+      <div class="space-y-4">
+        {% for session in subcategory.service_sessions %}
+        <div
+          class="flex items-center justify-between p-4 bg-base-300 rounded-lg"
+        >
+          <div>
+            <h4 class="font-medium">{{ session.name }}</h4>
+            <p>{{ session.price }}</p>
+          </div>
+          {% if not is_worker_view %}
+          <button
+            class="btn btn-primary"
+            onclick="openOrderModal('{{ session.name }}', '{{ session.price }}')"
+          >
+            Pesan
+          </button>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  {# Card for workers #}
+  <div class="card bg-base-200 shadow-xl mb-8">
+    <div class="card-body">
+      <h3 class="text-xl font-semibold mb-4">Pekerja</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+        {% for worker in subcategory.workers %}
+        <a
+          href="{% url 'service:worker_profile' %}"
+          class="card bg-base-300 hover:bg-base-100 transition-colors cursor-pointer"
+        >
+          <div class="card-body p-4 text-center">
+            <h4 class="font-medium">{{ worker.name }}</h4>
+            {% if worker.rating %}
+            <p>Rating: {{ worker.rating }}/5</p>
+            {% endif %} {% if worker.completed_orders %}
+            <p>Orders: {{ worker.completed_orders }}</p>
+            {% endif %}
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  {% if is_worker_view and not subcategory.is_joined %}
+  <div class="card-body items-center">
+    <button class="btn btn-primary">Bergabung sekarang!</button>
+  </div>
+  {% endif %} {# Card for testimonials #}
+  <div class="card bg-base-200 shadow-xl">
+    <div class="card-body">
+      <h3 class="text-xl font-semibold mb-4">Testimoni</h3>
+      <div class="space-y-4">
+        {% for testimonial in subcategory.testimonials %}
+        <div class="bg-base-300 rounded-lg p-4">
+          <div class="flex justify-between items-start mb-2">
+            <div>
+              <h4 class="font-medium">{{ testimonial.user_name }}</h4>
+              <p>{{ testimonial.date }}</p>
+            </div>
+            <div class="text-right">
+              <p>{{ testimonial.worker_name }}</p>
+              <div class="rating">
+                {% for i in "12345"|make_list %}
+                <input
+                  type="radio"
+                  class="mask mask-star-2 bg-orange-400"
+                  {%
+                  if
+                  forloop.counter
+                  <="testimonial.rating"
+                  %}checked{%
+                  endif
+                  %}
+                  disabled
+                />
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+          <p>{{ testimonial.text }}</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% if not is_worker_view %} {# Order Modal #}
+<dialog id="order_modal" class="modal">
+  <div class="modal-box">
+    <h3 class="font-bold text-lg mb-4 text-center">Pesan Jasa</h3>
+    <form id="orderForm" onsubmit="handleSubmit(event)">
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text">Tanggal Pemesanan</span>
+        </label>
+        <input
+          type="date"
+          id="order_date"
+          class="input input-bordered"
+          required
+        />
+      </div>
+
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text">Sesi Layanan</span>
+        </label>
+        <input
+          type="text"
+          id="selected_session"
+          class="input input-bordered"
+          readonly
+        />
+      </div>
+
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text">Harga</span>
+        </label>
+        <input
+          type="text"
+          id="session_price"
+          class="input input-bordered"
+          readonly
+        />
+      </div>
+
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text">Diskon</span>
+        </label>
+        <div class="flex gap-2">
+          <input
+            type="text"
+            id="discount_code"
+            placeholder="Kode Diskon"
+            class="input input-bordered flex-grow"
+          />
+          <button type="button" class="btn" onclick="applyDiscount(event)">
+            Apply
+          </button>
+        </div>
+        <span id="discount_message" class="text-sm mt-1"></span>
+      </div>
+
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text">Total Pembayaran</span>
+        </label>
+        <input
+          type="text"
+          id="total_payment"
+          class="input input-bordered"
+          readonly
+        />
+      </div>
+
+      <div class="form-control">
+        <label class="label">
+          <span class="label-text">Metode Pembayaran</span>
+        </label>
+        <select class="select select-bordered w-full" required>
+          <option value="" disabled selected>Pilih metode pembayaran</option>
+          {% for method in payment_methods %}
+          <option value="{{ method.id }}">{{ method.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="modal-action justify-between">
+        <button type="button" class="btn" onclick="closeOrderModal()">
+          Batal
+        </button>
+        <button type="submit" class="btn btn-primary">Pesan Jasa</button>
+      </div>
+    </form>
+  </div>
+</dialog>
+
+<script>
+let currentPrice = 0;
+let appliedDiscount = 0;
+
+function openOrderModal(sessionName, sessionPrice) {
+    const modal = document.getElementById("order_modal");
+    const orderDateInput = document.getElementById("order_date");
+    
+    // Set minimum date to today
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
+    const dd = String(today.getDate()).padStart(2, '0');
+    const todayStr = `${yyyy}-${mm}-${dd}`;
+    
+    orderDateInput.min = todayStr;
+    
+    document.getElementById("selected_session").value = sessionName;
+    document.getElementById("session_price").value = sessionPrice;
+    document.getElementById("total_payment").value = sessionPrice;
+    currentPrice = parseFloat(sessionPrice.replace("Rp ", "").replace(",", ""));
+    updateTotalPayment();
+    modal.showModal();
+}
+
+function closeOrderModal() {
+    const modal = document.getElementById("order_modal");
+    modal.close();
+    resetForm();
+}
+
+function resetForm() {
+    document.getElementById("orderForm").reset();
+    document.getElementById("discount_message").textContent = "";
+    appliedDiscount = 0;
+}
+
+async function applyDiscount(event) {
+    event.preventDefault();
+    const discountCode = document.getElementById("discount_code").value;
+    const messageElement = document.getElementById("discount_message");
+
+    try {
+    const response = await fetch(
+        `/api/validate-discount/?code=${discountCode}&amount=${currentPrice}`
+    );
+    const data = await response.json();
+
+    if (data.valid) {
+        appliedDiscount = data.discount_amount;
+        messageElement.textContent = `Diskon sebesar Rp ${data.discount_amount.toLocaleString()} diterapkan`;
+        messageElement.className = "text-sm mt-1 text-success";
+    } else {
+        appliedDiscount = 0;
+        messageElement.textContent = data.message;
+        messageElement.className = "text-sm mt-1 text-error";
+    }
+    updateTotalPayment();
+    } catch (error) {
+    console.error("Error:", error);
+    messageElement.textContent = "Terjadi kesalahan saat memvalidasi diskon";
+    messageElement.className = "text-sm mt-1 text-error";
+    }
+}
+
+function updateTotalPayment() {
+    const totalPayment = currentPrice - appliedDiscount;
+    document.getElementById(
+    "total_payment"
+    ).value = `Rp ${totalPayment.toLocaleString()}`;
+}
+
+async function handleSubmit(event) {
+    event.preventDefault();
+    
+    const form = event.target;
+    const formData = new FormData();
+    
+    const sessionName = document.getElementById('selected_session').value;
+    const session = parseInt(sessionName.replace('Sesi ', ''));
+    const totalCost = parseFloat(document.getElementById('total_payment').value
+        .replace('Rp ', '')
+        .replace(',', '')
+        .trim());
+    
+    // Add all required data to formData
+    formData.append('total_cost', totalCost);
+    formData.append('customer_id', '{{ request.user.id }}'); // You'll need to handle authentication
+    formData.append('subcategory_id', '{{ subcategory.id }}');
+    formData.append('session', session);
+    formData.append('discount_code', document.getElementById('discount_code').value);
+    formData.append('payment_method_id', form.querySelector('select').value);
+
+    try {
+        const response = await fetch('{% url "service:submit_order" %}', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+            },
+            body: formData
+        });
+
+        const data = await response.json();
+        
+        if (data.success) {
+            alert('Pesanan berhasil dibuat!');
+            window.location.href = '/pesanan/{{ request.user.id }}/';  // Redirect to orders page
+        } else {
+            alert('Error: ' + data.message);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Terjadi kesalahan saat membuat pesanan');
+    }
+}
+</script>
+{% endif %} {% endblock %}

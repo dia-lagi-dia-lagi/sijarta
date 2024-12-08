@@ -1,140 +1,99 @@
 {% extends 'base.html' %}
-{% load static %}
-
 {% block content %}
-
 {% load static %}
-<!DOCTYPE html>
-<html lang="id" data-theme="dark">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sijarta - Homepage</title>
-    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.19/dist/full.min.css" rel="stylesheet" type="text/css" />
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="min-h-screen bg-base-300">
-    <div class="container mx-auto px-4 py-8">
-        <!-- Header -->
-        <div class="text-center mb-8">
-            <h1 class="text-2xl text-primary font-semibold">Home Page</h1>
+
+<div class="container mx-auto px-4 py-8">
+    <div class="text-center mb-8">
+        <h1 class="text-2xl text-primary font-semibold">Home Page</h1>
+    </div>
+
+    <div class="flex flex-col justify-center sm:flex-row gap-4 mb-8">
+        {# Category filter dropdown #}
+        <div class="form-control w-full sm:w-72">
+            <select class="select select-bordered" id="categoryFilter">
+                <option value="all">Semua kategori</option>
+                {% for category in categories_list %}
+                    <option value="{{ category }}" {% if selected_category == category %}selected{% endif %}>
+                        {{ category }}
+                    </option>
+                {% endfor %}
+            </select>
         </div>
 
-        <!-- Filters -->
-        <div class="flex flex-col sm:flex-row justify-center gap-4 mb-8">
-            <div class="form-control w-full sm:w-72">
-                <select id="categoryFilter" class="select select-bordered">
-                    <option value="all" selected>Semua kategori</option>
-                    <option>Kategori Jasa 1</option>
-                    <option>Kategori Jasa 2</option>
-                    <option>Kategori Jasa 3</option>
-                </select>
+        {# Search box #}
+        <div class="form-control w-full sm:w-72">
+            <div class="relative">
+                <input type="text" id="searchInput" placeholder="Search" class="input input-bordered w-full pr-10"
+                       value="{{ search_query }}">
+                <button class="absolute right-2 top-1/2 -translate-y-1/2" id="searchButton">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </button>
             </div>
-            
-            <div class="form-control w-full sm:w-72">
-                <input type="text" id="subcategorySearch" placeholder="Nama Subkategori" class="input input-bordered" />
-            </div>
-
-            <button id="searchBtn" class="btn btn-primary">Search</button>
-        </div>
-
-        <!-- Categories and Subcategories -->
-        <div class="space-y-6 max-w-3xl mx-auto">
-            {% for category in categories %}
-            <details class="collapse bg-base-200 shadow-xl">
-                <summary class="collapse-title text-xl font-medium min-h-16 pr-0">
-                  <div class="flex justify-between items-center w-full">
-                      <span class="flex-grow">{{ category.name }}</span>
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 transform transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                      </svg>
-                  </div>
-                </summary>
-                <div class="collapse-content">
-                    <div class="divide-y divide-base-300 py-2">
-                        {% for subcategory in category.subcategories %}
-                        <a href="{% url 'service:subcategory_detail_pengguna' %}" 
-                           class="block py-3 px-4 hover:bg-base-300 transition-colors rounded-lg my-1">
-                            {{ subcategory }}
-                        </a>
-                        {% endfor %}
-                    </div>
-                </div>
-            </details>
-            {% endfor %}
         </div>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const searchInput = document.getElementById('subcategorySearch');
-            const categorySelect = document.getElementById('categoryFilter');
-            const searchButton = document.getElementById('searchBtn');
-            const detailsElements = document.querySelectorAll('details');
+    <div class="space-y-6 max-w-3xl mx-auto">
+        {% if categories_dict %}
+            {% for category in categories_dict %}
+                <div class="collapse bg-base-200">
+                    <input type="checkbox" class="peer" /> 
+                    <div class="collapse-title flex justify-between items-center w-full">
+                        <span class="flex-grow">{{ category.name }}</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 transform transition-transform duration-200 peer-checked:rotate-180" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </div>
+                    <div class="collapse-content">
+                        <div class="divide-y divide-base-300 py-2">
+                            {% for subcategory in category.subcategories %}
+                                <a href="{% url 'service:subcategory_detail' subcategory.id %}" 
+                                   class="block py-3 px-4 hover:bg-base-300 transition-colors rounded-lg my-1">
+                                    {{ subcategory.name }}
+                                </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="text-center py-8">
+                Kombinasi kategori jasa dan subkategori jasa tidak ditemukan
+            </div>
+        {% endif %}
+    </div>
+</div>
 
-            // Add toggle listeners for arrow rotation
-            detailsElements.forEach(details => {
-                details.addEventListener('toggle', function() {
-                    const arrow = this.querySelector('svg');
-                    arrow.style.transform = this.open ? 'rotate(180deg)' : '';
-                });
-            });
+<script>
+document.getElementById('categoryFilter').addEventListener('change', function() {
+    updateFilters();
+});
 
-            function filterContent() {
-                const searchTerm = searchInput.value.toLowerCase();
-                const selectedCategory = categorySelect.value;
+document.getElementById('searchInput').addEventListener('keyup', function(event) {
+    if (event.key === 'Enter') {
+        updateFilters();
+    }
+});
 
-                detailsElements.forEach(details => {
-                    const categoryTitle = details.querySelector('.collapse-title span').textContent.trim();
-                    const subcategoryLinks = details.querySelectorAll('.collapse-content a');
-                    let hasMatchingSubcategories = false;
+document.getElementById('searchButton').addEventListener('click', function() {
+    updateFilters();
+});
 
-                    // First determine if this category should be shown based on dropdown selection
-                    const categoryMatches = selectedCategory === 'all' || categoryTitle === selectedCategory;
+function updateFilters() {
+    const category = document.getElementById('categoryFilter').value;
+    const search = document.getElementById('searchInput').value;
+    
+    let url = new URL(window.location.href);
+    url.searchParams.set('category', category);
+    if (search) {
+        url.searchParams.set('search', search);
+    } else {
+        url.searchParams.delete('search');
+    }
+    
+    window.location.href = url.toString();
+}
+</script>
 
-                    if (categoryMatches) {
-                        // Then check subcategories for search term matches
-                        subcategoryLinks.forEach(link => {
-                            const subcategoryText = link.textContent.trim().toLowerCase();
-                            const matchesSearch = searchTerm === '' || subcategoryText.includes(searchTerm);
-                            
-                            // Show/hide individual subcategory
-                            link.style.display = matchesSearch ? 'block' : 'none';
-                            
-                            if (matchesSearch) {
-                                hasMatchingSubcategories = true;
-                            }
-                        });
-
-                        // If searching and no matches in subcategories, hide the category
-                        if (searchTerm && !hasMatchingSubcategories) {
-                            details.style.display = 'none';
-                        } else {
-                            details.style.display = 'block';
-                            // If there are matching results, open the details element
-                            if (searchTerm && hasMatchingSubcategories) {
-                                details.open = true;
-                            }
-                        }
-                    } else {
-                        details.style.display = 'none';
-                    }
-                });
-            }
-
-            searchButton.addEventListener('click', filterContent);
-
-            // Enable search on Enter key
-            searchInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    filterContent();
-                }
-            });
-
-            // Initialize with all categories visible
-            filterContent();
-        });
-    </script>
-</body>
-</html>
 {% endblock %}
