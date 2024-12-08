@@ -10,11 +10,43 @@ import uuid
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 import json
+from django.db import connections, connection
 
 # @login_required(login_url='/auth/login/')
 def show_discount(request):
+    promo = fetch_promo()
+    voucher = fetch_voucher()
+    metode_bayar = fetch_pay_option()
+
     context = {
         'user': request.user,
+        'promos': promo,
+        'vouchers': voucher,
+        'metode_pembayaran' : metode_bayar,
+
     }
 
     return render(request, "discount.html", context)
+
+
+def fetch_voucher():
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT * FROM DISKON NATURAL JOIN VOUCHER")
+        rows = cursor.fetchall()
+    return rows
+
+def fetch_promo():
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT * FROM PROMO")
+        rows = cursor.fetchall()
+    return rows
+
+def fetch_pay_option():
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT * FROM METODE_BAYAR")
+        rows = cursor.fetchall()
+    return rows
+
+
+
+
