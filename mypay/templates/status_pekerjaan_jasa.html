@@ -1,73 +1,143 @@
 {% extends 'base.html' %}
 {% block content %}
-<div style="border: 1px solid #000; padding: 20px; max-width: 800px; margin: auto;">
-    <h2 style="text-align: center;">Status Pekerjaan Jasa</h2>
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-        <div style="flex: 1; margin-right: 10px;">
-            <label for="nama_jasa"><strong>Nama Jasa:</strong></label>
-            <input type="text" id="nama_jasa" placeholder="Cari Nama Jasa" style="width: 100%; padding: 5px;">
+<div class="border border-gray-300 p-5 max-w-4xl mx-auto">
+    <h2 class="text-2xl font-bold text-center mb-5">Status Pekerjaan Jasa</h2>
+
+    <div class="flex justify-between items-center mb-5">
+        <div class="flex-1 mr-2">
+            <label class="block mb-2">Nama Jasa:</label>
+            <input type="text" id="namaJasaFilter" 
+                   class="w-full p-2 border rounded" 
+                   placeholder="Filter nama jasa...">
         </div>
-        <div style="flex: 1; margin-right: 10px;">
-            <label for="status_pesanan"><strong>Status Pesanan:</strong></label>
-            <select id="status_pesanan" style="width: 100%; padding: 5px;">
+
+        <div class="flex-1 mr-2">
+            <label class="block mb-2">Status Pesanan:</label>
+            <select id="statusFilter" class="w-full p-2 border rounded">
                 <option value="">Semua Status</option>
-                <option value="menunggu">Menunggu Pekerja Berangkat</option>
-                <option value="tiba">Pekerja Tiba Di Lokasi</option>
-                <option value="melayani">Pelayanan Jasa Sedang Dilakukan</option>
-                <option value="selesai">Pesanan Selesai</option>
-                <option value="dibatalkan">Pesanan Dibatalkan</option>
+                {% for status in status_list %}
+                    <option value="{{ status }}">{{ status }}</option>
+                {% endfor %}
             </select>
         </div>
-        <div>
-            <button onclick="filterOrders()" style="padding: 5px 10px; background-color: #007bff; color: #fff; border: none; cursor: pointer;">
-                Search
-            </button>
+
+        <div class="flex-1">
+            <label class="block mb-2">Search:</label>
+            <input type="text" id="searchInput" 
+                   class="w-full p-2 border rounded" 
+                   placeholder="Cari pesanan...">
         </div>
     </div>
-    <div id="order_list" style="margin-top: 20px;">
-        <!-- Example Order Listings -->
-        <div style="border: 1px solid #000; padding: 10px; margin-bottom: 10px;">
-            <div style="display: flex; justify-content: space-between;">
-                <div><strong>Nama Subkategori Pesanan:</strong> Daily Cleaning</div>
-                <div><strong>Nama Pelanggan:</strong> Jane Doe</div>
-                <div><strong>Total Biaya:</strong> Rp 150,000</div>
-                <div><strong>Status Pesanan:</strong> Menunggu Pekerja Berangkat</div>
+
+    <div id="order_list" class="mt-5 space-y-4">
+        {% for job in jobs %}
+        <div class="job-item border border-gray-300 p-4 rounded"
+             data-nama-jasa="{{ job.nama_subkategori }}"
+             data-status="{{ job.current_status }}">
+            <div class="flex justify-between items-center mb-2">
                 <div>
-                    <button onclick="updateStatus('tiba')" style="padding: 5px 10px; background-color: #28a745; color: #fff; border: none; cursor: pointer;">
-                        Tiba Di Lokasi
-                    </button>
+                    <strong>Nama Subkategori:</strong> {{ job.nama_subkategori }}
                 </div>
+                <div>
+                    <strong>Nama Pelanggan:</strong> {{ job.nama_pelanggan }}
+                </div>
+                <div>
+                    <strong>Total Biaya:</strong> Rp {{ job.total_biaya|floatformat:0 }}
+                </div>
+                <div>
+                    <strong>Status:</strong> {{ job.current_status }}
+                </div>
+                
+                {% if job.current_status == "Menunggu Pekerja Berangkat" %}
+                <button onclick="updateStatus('{{ job.id_tr_pemesanan_jasa }}', 'Pekerja tiba di lokasi')"
+                        class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                    Tiba Di Lokasi
+                </button>
+                {% elif job.current_status == "Pekerja tiba di lokasi" %}
+                <button onclick="updateStatus('{{ job.id_tr_pemesanan_jasa }}', 'Pelayanan jasa sedang dilakukan')"
+                        class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+                    Melakukan Pelayanan Jasa
+                </button>
+                {% elif job.current_status == "Pelayanan jasa sedang dilakukan" %}
+                <button onclick="updateStatus('{{ job.id_tr_pemesanan_jasa }}', 'Pesanan selesai')"
+                        class="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600">
+                    Selesai Melakukan Pelayanan
+                </button>
+                {% endif %}
             </div>
-            <div style="margin-top: 10px;">
-                <strong>Tanggal Pemesanan:</strong> 18 Nov 2024<br>
-                <strong>Tanggal Pekerjaan:</strong> 20 Nov 2024
+            
+            <div class="mt-2 text-sm text-gray-600">
+                <div><strong>Tanggal Pemesanan:</strong> {{ job.tgl_pemesanan|date:"d M Y" }}</div>
+                <div><strong>Tanggal Pekerjaan:</strong> {{ job.tgl_pekerjaan|date:"d M Y" }}</div>
+                <div><strong>Waktu Pekerjaan:</strong> {{ job.waktu_pekerjaan|date:"d M Y H:i" }}</div>
             </div>
         </div>
-        <!-- Additional Orders Would Be Dynamically Rendered Here -->
+        {% empty %}
+        <div class="text-center text-gray-500">
+            Tidak ada pekerjaan saat ini
+        </div>
+        {% endfor %}
     </div>
 </div>
 
 <script>
-function filterOrders() {
-    // Placeholder function for filtering orders based on search criteria
-    alert("Filtering orders based on Nama Jasa and Status Pesanan!");
-}
+document.addEventListener('DOMContentLoaded', function() {
+    const namaJasaFilter = document.getElementById('namaJasaFilter');
+    const statusFilter = document.getElementById('statusFilter');
+    const searchInput = document.getElementById('searchInput');
+    const jobItems = document.querySelectorAll('.job-item');
 
-function updateStatus(nextStatus) {
-    // Placeholder function to simulate status updates
-    let statusMessage = "";
-    switch (nextStatus) {
-        case "tiba":
-            statusMessage = "Status updated to: Pekerja Tiba Di Lokasi";
-            break;
-        case "melayani":
-            statusMessage = "Status updated to: Pelayanan Jasa Sedang Dilakukan";
-            break;
-        case "selesai":
-            statusMessage = "Status updated to: Pesanan Selesai";
-            break;
+    function filterJobs() {
+        const namaJasaTerm = namaJasaFilter.value.toLowerCase();
+        const statusTerm = statusFilter.value;
+        const searchTerm = searchInput.value.toLowerCase();
+
+        jobItems.forEach(job => {
+            const namaJasa = job.dataset.namaJasa.toLowerCase();
+            const status = job.dataset.status;
+            const jobText = job.textContent.toLowerCase();
+            
+            const matchesNamaJasa = !namaJasaTerm || namaJasa.includes(namaJasaTerm);
+            const matchesStatus = !statusTerm || status === statusTerm;
+            const matchesSearch = !searchTerm || jobText.includes(searchTerm);
+
+            job.style.display = (matchesNamaJasa && matchesStatus && matchesSearch) ? '' : 'none';
+        });
     }
-    alert(statusMessage);
+
+    namaJasaFilter.addEventListener('input', filterJobs);
+    statusFilter.addEventListener('change', filterJobs);
+    searchInput.addEventListener('input', filterJobs);
+});
+
+async function updateStatus(jobId, newStatus) {
+    if (!confirm(`Apakah Anda yakin ingin mengubah status menjadi "${newStatus}"?`)) {
+        return;
+    }
+
+    try {
+        const response = await fetch('{% url "mypay:status_pekerjaan_jasa" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({
+                job_id: jobId,
+                new_status: newStatus
+            })
+        });
+
+        const result = await response.json();
+        if (result.status === 'success') {
+            alert('Status berhasil diupdate!');
+            window.location.reload();
+        } else {
+            alert('Error: ' + result.message);
+        }
+    } catch (error) {
+        alert('Error mengupdate status: ' + error);
+    }
 }
 </script>
 {% endblock %}

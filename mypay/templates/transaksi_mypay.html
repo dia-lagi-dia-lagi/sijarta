@@ -1,93 +1,168 @@
 {% extends 'base.html' %}
 {% block content %}
-<div style="border: 1px solid #000; padding: 20px; max-width: 600px; margin: auto;">
-    <h2 style="text-align: center;">Transaksi MyPay</h2>
-    <div style="margin-bottom: 20px;">
-        <strong>Tanggal Transaksi:</strong> 18 Nov 2024
+<div class="border border-gray-300 p-5 max-w-2xl mx-auto">
+    <h2 class="text-2xl font-bold text-center mb-5">Transaksi MyPay</h2>
+
+    <div class="mb-5">
+        <p class="mb-2"><strong>Tanggal Transaksi:</strong> {% now "d M Y" %}</p>
+        <p class="mb-2"><strong>Nama User:</strong> {{ request.user.nama }}</p>
+        <p class="mb-2"><strong>Saldo User:</strong> Rp {{ request.user.saldomypay|floatformat:0 }}</p>
     </div>
-    <div style="margin-bottom: 20px;">
-        <strong>Nama User:</strong> John Doe<br>
-        <strong>Saldo User:</strong> Rp 500,000
-    </div>
-    <div style="margin-bottom: 20px;">
-        <label for="kategori_transaksi"><strong>Kategori Transaksi:</strong></label>
-        <select id="kategori_transaksi" onchange="updateForm()" style="width: 100%; padding: 5px;">
-            <option value="topup">Top-Up</option>
-            <option value="payment">Pembayaran Jasa</option>
-            <option value="transfer">Transfer</option>
-            <option value="withdrawal">Withdrawal</option>
-        </select>
-    </div>
-    <div id="form_container" style="border: 1px solid #000; padding: 20px;">
-        <!-- Forms will dynamically appear here -->
-    </div>
+
+    <form id="transactionForm" class="border border-gray-300 p-4">
+        {% csrf_token %}
+        <div class="mb-4">
+            <label class="block mb-2">Kategori Transaksi:</label>
+            <select id="kategoriTransaksi" class="w-full p-2 border rounded" required>
+                {% if request.user.is_pekerja %}
+                    <option value="TopUp">Top-Up</option>
+                    <option value="Transfer">Transfer</option>
+                    <option value="Withdrawal">Withdrawal</option>
+                {% else %}
+                    <option value="TopUp">Top-Up</option>
+                    <option value="Pembayaran Jasa">Pembayaran Jasa</option>
+                    <option value="Transfer">Transfer</option>
+                    <option value="Withdrawal">Withdrawal</option>
+                {% endif %}
+            </select>
+        </div>
+
+        <!-- TopUp Form -->
+        <div id="topUpForm" class="transaction-form hidden">
+            <div class="mb-4">
+                <label class="block mb-2">Nominal Top Up:</label>
+                <input type="number" class="w-full p-2 border rounded" name="nominal" required>
+            </div>
+        </div>
+
+        <!-- Pembayaran Jasa Form -->
+        <div id="pembayaranForm" class="transaction-form hidden">
+            <div class="mb-4">
+                <label class="block mb-2">Pilih Jasa:</label>
+                <select class="w-full p-2 border rounded" name="id_pemesanan">
+                    {% for pesanan in pending_orders %}
+                    <option value="{{ pesanan.id_tr_pemesanan_jasa }}">
+                        {{ pesanan.nama_subkategori }} - Rp {{ pesanan.total_biaya|floatformat:0 }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <!-- Transfer Form -->
+        <div id="transferForm" class="transaction-form hidden">
+            <div class="mb-4">
+                <label class="block mb-2">No HP Tujuan:</label>
+                <input type="text" class="w-full p-2 border rounded" name="no_hp_tujuan" required>
+            </div>
+            <div class="mb-4">
+                <label class="block mb-2">Nominal Transfer:</label>
+                <input type="number" class="w-full p-2 border rounded" name="nominal" required>
+            </div>
+        </div>
+
+        <!-- Withdrawal Form -->
+        <div id="withdrawalForm" class="transaction-form hidden">
+            <div class="mb-4">
+                <label class="block mb-2">Bank:</label>
+                <select class="w-full p-2 border rounded" name="nama_bank">
+                    <option value="BCA">Virtual Account BCA</option>
+                    <option value="BNI">Virtual Account BNI</option>
+                    <option value="Mandiri">Virtual Account Mandiri</option>
+                    <option value="GoPay">GoPay</option>
+                    <option value="OVO">OVO</option>
+                </select>
+            </div>
+            <div class="mb-4">
+                <label class="block mb-2">Nomor Rekening:</label>
+                <input type="text" class="w-full p-2 border rounded" name="nomor_rekening" required>
+            </div>
+            <div class="mb-4">
+                <label class="block mb-2">Nominal Withdrawal:</label>
+                <input type="number" class="w-full p-2 border rounded" name="nominal" required>
+            </div>
+        </div>
+
+        <button type="submit" class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">
+            Submit Transaksi
+        </button>
+    </form>
 </div>
 
 <script>
-function updateForm() {
-    const category = document.getElementById("kategori_transaksi").value;
-    const formContainer = document.getElementById("form_container");
-    let formContent = "";
+document.addEventListener('DOMContentLoaded', function() {
+    const kategoriSelect = document.getElementById('kategoriTransaksi');
+    const forms = {
+        'TopUp': document.getElementById('topUpForm'),
+        'Pembayaran Jasa': document.getElementById('pembayaranForm'),
+        'Transfer': document.getElementById('transferForm'),
+        'Withdrawal': document.getElementById('withdrawalForm')
+    };
 
-    switch (category) {
-        case "topup":
-            formContent = `
-                <div>
-                    <label for="nominal"><strong>Nominal:</strong></label>
-                    <input type="number" id="nominal" placeholder="Enter amount" style="width: 100%; padding: 5px;">
-                    <button style="margin-top: 10px; padding: 5px 10px; background-color: #007bff; color: #fff; border: none; cursor: pointer;">Top Up</button>
-                </div>
-            `;
-            break;
-        case "payment":
-            formContent = `
-                <div>
-                    <label for="pesanan_jasa"><strong>Pesanan Jasa:</strong></label>
-                    <select id="pesanan_jasa" style="width: 100%; padding: 5px;">
-                        <option value="jasa1">Jasa 1</option>
-                        <option value="jasa2">Jasa 2</option>
-                    </select>
-                    <div style="margin-top: 10px;">
-                        <strong>Harga Jasa:</strong> Rp 100,000
-                    </div>
-                    <button style="margin-top: 10px; padding: 5px 10px; background-color: #007bff; color: #fff; border: none; cursor: pointer;">Bayar</button>
-                </div>
-            `;
-            break;
-        case "transfer":
-            formContent = `
-                <div>
-                    <label for="nohp_tujuan"><strong>No HP Tujuan:</strong></label>
-                    <input type="text" id="nohp_tujuan" placeholder="Enter phone number" style="width: 100%; padding: 5px;">
-                    <label for="nominal_transfer" style="margin-top: 10px;"><strong>Nominal:</strong></label>
-                    <input type="number" id="nominal_transfer" placeholder="Enter amount" style="width: 100%; padding: 5px;">
-                    <button style="margin-top: 10px; padding: 5px 10px; background-color: #007bff; color: #fff; border: none; cursor: pointer;">Bayar</button>
-                </div>
-            `;
-            break;
-        case "withdrawal":
-            formContent = `
-                <div>
-                    <label for="nama_bank"><strong>Nama Bank:</strong></label>
-                    <select id="nama_bank" style="width: 100%; padding: 5px;">
-                        <option value="bca">BCA</option>
-                        <option value="bni">BNI</option>
-                        <option value="mandiri">Mandiri</option>
-                    </select>
-                    <label for="no_rekening" style="margin-top: 10px;"><strong>No Rekening:</strong></label>
-                    <input type="text" id="no_rekening" placeholder="Enter account number" style="width: 100%; padding: 5px;">
-                    <label for="nominal_withdraw" style="margin-top: 10px;"><strong>Nominal:</strong></label>
-                    <input type="number" id="nominal_withdraw" placeholder="Enter amount" style="width: 100%; padding: 5px;">
-                    <button style="margin-top: 10px; padding: 5px 10px; background-color: #007bff; color: #fff; border: none; cursor: pointer;">Bayar</button>
-                </div>
-            `;
-            break;
+    function showSelectedForm() {
+        // Hide all forms
+        Object.values(forms).forEach(form => {
+            if (form) form.classList.add('hidden');
+        });
+        
+        // Show selected form
+        const selectedForm = forms[kategoriSelect.value];
+        if (selectedForm) {
+            selectedForm.classList.remove('hidden');
+        }
     }
 
-    formContainer.innerHTML = formContent;
-}
+    kategoriSelect.addEventListener('change', showSelectedForm);
+    showSelectedForm(); // Show initial form
 
-// Initialize with the first form
-updateForm();
+    // Handle form submission
+    document.getElementById('transactionForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(this);
+        const kategori = kategoriSelect.value;
+        const data = {
+            kategori: kategori,
+            nominal: formData.get('nominal'),
+        };
+
+        // Add additional data based on transaction type
+        if (kategori === 'Pembayaran Jasa') {
+            data.id_pemesanan = formData.get('id_pemesanan');
+        } else if (kategori === 'Transfer') {
+            data.no_hp_tujuan = formData.get('no_hp_tujuan');
+        } else if (kategori === 'Withdrawal') {
+            data.nama_bank = formData.get('nama_bank');
+            data.nomor_rekening = formData.get('nomor_rekening');
+        }
+
+        try {
+            const response = await fetch('{% url "mypay:transaksi_mypay" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify(data)
+            });
+            
+            const result = await response.json();
+            if (result.status === 'success') {
+                alert('Transaksi berhasil!');
+                window.location.href = '{% url "mypay:mypay_home" %}';
+            } else {
+                alert('Error: ' + result.message);
+            }
+        } catch (error) {
+            alert('Error submitting transaction: ' + error);
+        }
+    });
+});
 </script>
+
+<style>
+.hidden {
+    display: none;
+}
+</style>
 {% endblock %}
