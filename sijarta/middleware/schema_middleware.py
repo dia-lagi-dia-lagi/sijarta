@@ -6,7 +6,7 @@ class SchemaMiddleware:
 
     def __call__(self, request):
         # Set the search_path for each request
-        schema_name = 'sijarta'  # Replace with dynamic logic if needed
+        schema_name = 'sijarta, public'  # Replace with dynamic logic if needed
         with connection.cursor() as cursor:
             cursor.execute(f'SET search_path TO {schema_name};')
         

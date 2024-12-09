@@ -1,6 +1,10 @@
 <div class="navbar sticky top-0 bg-gray-600 text-white z-50 shadow-md">
   <div class="ml-2">
-    <a class="btn btn-ghost normal-case text-xl">SIJARTA</a>
+    {% if request.session.user_id %}
+      <a href="{% url 'service:homepage' %}" class="btn btn-ghost normal-case text-xl mr-4">SIJARTA</a>
+    {% else %}
+      <a href="{% url 'authentication:login' %}" class="btn btn-ghost normal-case text-xl mr-4">SIJARTA</a>
+    {% endif %}
   </div>
   <div class="flex-none gap-2">
     
@@ -13,15 +17,15 @@
     <!-- Navbar for Pengguna -->
     <div id="navbar-pengguna" class="flex items-center hidden">
       <div>
-        <span class="font-semibold ml-2 mr-4">Pengguna: John Doe</span>
+        <span class="font-semibold ml-2 mr-4">Pengguna: {{ request.session.nama }}</span>
       </div>
       <ul class="menu menu-horizontal p-0 flex space-x-4">
-        <li><a href="#homepage">Homepage</a></li>
-        <li><a href="#mypay">MyPay</a></li>
-        <li><a href="#kelola-pesanan">Kelola Pesanan Saya</a></li>
-        <li><a href="#diskon">Diskon</a></li>
-        <li><a href="#profile">Profile</a></li>
-        <li><a href="#logout">Logout</a></li>
+        <li><a href="{% url 'service:homepage' %}">Homepage</a></li>
+        <li><a href="{% url 'mypay:mypay_home' %}">MyPay</a></li>
+        <li><a href="{% url 'discount:show_discount' %}">Kelola Pesanan Saya</a></li>
+        <li><a href="{% url 'discount:show_discount' %}">Diskon</a></li>
+        <li><a href="{% url 'user_profile:profile' %}">Profile</a></li>
+        <li><a href="{% url 'authentication:logout' %}">Logout</a></li>
       </ul>
     </div>
 
@@ -46,16 +50,17 @@
 <!-- Example JavaScript for Dynamic Navbar Switching -->
 <script>
   const navbarGuest = document.getElementById('navbar-guest');
-  const navbarPengguna = document.getElementById('navbar-pengguna');
+  const navbarPelanggan = document.getElementById('navbar-pengguna');
   const navbarPekerja = document.getElementById('navbar-pekerja');
 
   // Simulated user roles: 'guest', 'pengguna', or 'pekerja'
-  const userRole = 'guest'; // Change this value to test the different navbars
+  const userRole = "{{ request.session.user_role|default:'guest' }}"; // Change this value to test the different navbars
+  console.log("user role: ", userRole)
 
   if (userRole === 'guest') {
     navbarGuest.classList.remove('hidden');
-  } else if (userRole === 'pengguna') {
-    navbarPengguna.classList.remove('hidden');
+  } else if (userRole === 'pelanggan') {
+    navbarPelanggan.classList.remove('hidden');
   } else if (userRole === 'pekerja') {
     navbarPekerja.classList.remove('hidden');
   }

@@ -24,9 +24,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     # path('discount/', include('discount.urls', namespace="discount")),
+    path('', include('authentication.urls')),
     path('', include('discount.urls', namespace="discount")),
     path('', include('service.urls')),
-    path('', include('authentication.urls')),
     path('', include('user_profile.urls')),
     path('mypay/', include('mypay.urls'))
 ]
