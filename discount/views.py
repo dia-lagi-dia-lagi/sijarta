@@ -45,8 +45,8 @@ def insert_into_tr_pembelian_voucher(request):
     if request.method == 'POST':
         try:
             # Retrieve POST data from the form
-            # id_pelanggan = request.POST.get('id_pelanggan')  
-            id_pelanggan = '8750a667-8542-4e7f-aa97-f6ecbeddf14e'
+            id_pelanggan = request.session['id_user']
+            # id_pelanggan = '8750a667-8542-4e7f-aa97-f6ecbeddf14e'
             id_voucher = request.POST.get('id_voucher')  # Similarly, get voucher ID
             id_metode_bayar = request.POST.get('metode_pembayaran')  # Method of payment from form
 
@@ -56,7 +56,7 @@ def insert_into_tr_pembelian_voucher(request):
 
             # Generate a new UUID for the transaction
             id_tr_pembelian_voucher = uuid.uuid4()  
-            # id_tr_pembelian_voucher = 'dd65e64c-1854-4d23-b778-f877986f5beb'
+
             tgl_awal = date.today()  # Today's date for 'tgl_awal'
             
             # Set the default value for 'telah_digunakan' (not used yet)
